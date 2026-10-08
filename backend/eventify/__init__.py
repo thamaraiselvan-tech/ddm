@@ -1,0 +1,1 @@
+# Eventify Django Project

@@ -1,0 +1,3730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventify — DBMS Project Report</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 16mm 18mm 16mm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Courier New', monospace;
+                font-size: 9pt;
+                color: #444;
+            }
+        }
+        
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt;
+            line-height: 1.5;
+            color: #111111;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* COVER PAGE */
+        .cover-page {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            page-break-after: always;
+            padding: 40px 20px;
+        }
+
+        .academic-header {
+            font-size: 12pt;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .course-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #1a56db;
+            margin-bottom: 50px;
+        }
+
+        .main-title {
+            font-size: 32pt;
+            font-weight: bold;
+            color: #000000;
+            margin: 0 0 10px 0;
+            line-height: 1.1;
+        }
+
+        .sub-title {
+            font-size: 13pt;
+            color: #444444;
+            max-width: 550px;
+            margin: 0 auto 60px auto;
+        }
+
+        .meta-table {
+            width: 100%;
+            max-width: 480px;
+            margin-top: auto;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+        }
+
+        .meta-table td {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+        }
+
+        .meta-table td.label {
+            font-weight: bold;
+            background-color: #f2f2f2;
+            width: 35%;
+        }
+
+        /* HEADINGS */
+        h1 {
+            font-size: 15pt;
+            font-weight: bold;
+            color: #000;
+            border-bottom: 2px solid #333;
+            padding-bottom: 4px;
+            margin-top: 22px;
+            margin-bottom: 12px;
+            page-break-after: avoid;
+        }
+
+        h2 {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #1a56db;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 10.5pt;
+            font-weight: bold;
+            color: #222;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        /* DATA TABLES */
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            margin-bottom: 14px;
+            font-size: 9pt;
+            page-break-inside: avoid;
+        }
+
+        table.data-table th {
+            background-color: #eaeaea;
+            color: #000;
+            font-weight: bold;
+            text-align: left;
+            padding: 6px 8px;
+            border: 1px solid #999;
+        }
+
+        table.data-table td {
+            padding: 5px 8px;
+            border: 1px solid #aaa;
+            vertical-align: top;
+        }
+
+        /* PLAIN TEXT CODE BLOCKS */
+        pre.code-block {
+            background-color: #f8f9fa;
+            color: #111111;
+            border: 1px solid #cccccc;
+            padding: 10px 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 8pt;
+            line-height: 1.35;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            page-break-inside: auto;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .diagram-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 14px;
+            text-align: center;
+            background: #fafafa;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- COVER PAGE -->
+    <div class="cover-page">
+        <div class="academic-header">Database Design & Management System</div>
+        <div class="course-title">Academic Capstone DBMS Project Report</div>
+        
+        <h1 class="main-title">EVENTIFY</h1>
+        <div class="sub-title">A Full-Stack Event Registration System Demonstrating Frontend ↔ Backend ↔ Database Connectivity</div>
+        
+        <table class="meta-table">
+            <tr>
+                <td class="label">Subject</td>
+                <td>Database Design and Management</td>
+            </tr>
+            <tr>
+                <td class="label">Frontend</td>
+                <td>HTML5, CSS3, Vanilla JavaScript</td>
+            </tr>
+            <tr>
+                <td class="label">Backend</td>
+                <td>Django REST Framework (Python)</td>
+            </tr>
+            <tr>
+                <td class="label">Database</td>
+                <td>MySQL / SQLite Relational DB</td>
+            </tr>
+            <tr>
+                <td class="label">Architecture</td>
+                <td>3-Tier Client-Server REST API</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1. INTRODUCTION -->
+    <h1>1. Introduction & System Overview</h1>
+    <p>
+        <strong>Eventify</strong> is a web-based Event Registration System developed for the subject <strong>Database Design and Management</strong>. The goal of this project is to demonstrate real-time database connectivity between a Frontend user interface (HTML/CSS/JS), a Backend REST API (Django), and a Relational Database engine (MySQL/SQLite).
+    </p>
+    <p>
+        All event details, participant profiles, and event registrations are stored in normalized relational database tables. Actions taken by users on the website trigger HTTP API calls, which execute SQL queries against the database and update the interface dynamically.
+    </p>
+
+    <!-- 2. CONCEPTUAL MODEL & RELATIONAL SCHEMA -->
+    <div class="page-break"></div>
+    <h1>2. Database Design & Relational Tables</h1>
+    <p>
+        The relational database consists of three primary tables in 3rd Normal Form (3NF). The Many-to-Many relationship between <code>events</code> and <code>participants</code> is resolved using the <code>registrations</code> junction table.
+    </p>
+
+    <h2>2.1 Entity Relationship Diagram</h2>
+    <div class="diagram-box">
+        <svg viewBox="0 0 800 280" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+            <!-- LINES -->
+            <line x1="220" y1="140" x2="310" y2="140" stroke="#333" stroke-width="2" stroke-dasharray="4,4"/>
+            <line x1="490" y1="140" x2="580" y2="140" stroke="#333" stroke-width="2" stroke-dasharray="4,4"/>
+
+            <text x="240" y="132" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1a56db">1</text>
+            <text x="285" y="132" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d97706">N</text>
+            <text x="505" y="132" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d97706">N</text>
+            <text x="555" y="132" font-family="sans-serif" font-size="12" font-weight="bold" fill="#059669">1</text>
+
+            <!-- EVENTS -->
+            <rect x="30" y="30" width="190" height="220" rx="4" fill="#fff" stroke="#1a56db" stroke-width="2"/>
+            <rect x="30" y="30" width="190" height="36" rx="4" fill="#1a56db"/>
+            <text x="125" y="53" font-family="sans-serif" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">EVENTS</text>
+            <text x="45" y="85" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#1a56db">id (PK)</text>
+            <text x="45" y="105" font-family="sans-serif" font-size="10.5" fill="#333">name</text>
+            <text x="45" y="125" font-family="sans-serif" font-size="10.5" fill="#333">description</text>
+            <text x="45" y="145" font-family="sans-serif" font-size="10.5" fill="#333">event_date</text>
+            <text x="45" y="165" font-family="sans-serif" font-size="10.5" fill="#333">venue</text>
+            <text x="45" y="185" font-family="sans-serif" font-size="10.5" fill="#333">max_seats</text>
+            <text x="45" y="205" font-family="sans-serif" font-size="10.5" fill="#333">category</text>
+            <text x="45" y="225" font-family="sans-serif" font-size="10.5" fill="#333">is_active</text>
+
+            <!-- REGISTRATIONS -->
+            <rect x="310" y="50" width="180" height="180" rx="4" fill="#fff" stroke="#d97706" stroke-width="2"/>
+            <rect x="310" y="50" width="180" height="36" rx="4" fill="#d97706"/>
+            <text x="400" y="73" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fff" text-anchor="middle">REGISTRATIONS</text>
+            <text x="325" y="105" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#d97706">id (PK)</text>
+            <text x="325" y="130" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#b45309">event_id (FK)</text>
+            <text x="325" y="155" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#b45309">participant_id (FK)</text>
+            <text x="325" y="180" font-family="sans-serif" font-size="10.5" fill="#333">registered_at</text>
+
+            <!-- PARTICIPANTS -->
+            <rect x="580" y="50" width="190" height="180" rx="4" fill="#fff" stroke="#059669" stroke-width="2"/>
+            <rect x="580" y="50" width="190" height="36" rx="4" fill="#059669"/>
+            <text x="675" y="73" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fff" text-anchor="middle">PARTICIPANTS</text>
+            <text x="595" y="105" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#059669">id (PK)</text>
+            <text x="595" y="130" font-family="sans-serif" font-size="10.5" fill="#333">name</text>
+            <text x="595" y="155" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#047857">email (UNIQUE)</text>
+            <text x="595" y="180" font-family="sans-serif" font-size="10.5" fill="#333">phone</text>
+            <text x="595" y="205" font-family="sans-serif" font-size="10.5" fill="#333">college</text>
+        </svg>
+    </div>
+
+    <h2>2.2 Data Dictionary</h2>
+    <h3>Table: events</h3>
+    <table class="data-table">
+        <tr><th>Column Name</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr>
+        <tr><td>id</td><td>INT</td><td>PRIMARY KEY AUTO_INCREMENT</td><td>Unique event identifier</td></tr>
+        <tr><td>name</td><td>VARCHAR(200)</td><td>NOT NULL</td><td>Event title</td></tr>
+        <tr><td>description</td><td>TEXT</td><td>NOT NULL</td><td>Event summary</td></tr>
+        <tr><td>event_date</td><td>DATETIME</td><td>NOT NULL</td><td>Event date & time</td></tr>
+        <tr><td>venue</td><td>VARCHAR(250)</td><td>NOT NULL</td><td>Hall / Online link</td></tr>
+        <tr><td>max_seats</td><td>INT</td><td>NOT NULL</td><td>Capacity limit</td></tr>
+        <tr><td>category</td><td>VARCHAR(50)</td><td>NOT NULL</td><td>Category tag</td></tr>
+    </table>
+
+    <h3>Table: participants</h3>
+    <table class="data-table">
+        <tr><th>Column Name</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr>
+        <tr><td>id</td><td>INT</td><td>PRIMARY KEY AUTO_INCREMENT</td><td>Unique participant ID</td></tr>
+        <tr><td>name</td><td>VARCHAR(150)</td><td>NOT NULL</td><td>Participant name</td></tr>
+        <tr><td>email</td><td>VARCHAR(254)</td><td>NOT NULL UNIQUE</td><td>Unique contact email</td></tr>
+        <tr><td>college</td><td>VARCHAR(200)</td><td>DEFAULT ''</td><td>Institution name</td></tr>
+    </table>
+
+    <h3>Table: registrations</h3>
+    <table class="data-table">
+        <tr><th>Column Name</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr>
+        <tr><td>id</td><td>INT</td><td>PRIMARY KEY AUTO_INCREMENT</td><td>Registration transaction ID</td></tr>
+        <tr><td>event_id</td><td>INT</td><td>FOREIGN KEY → events(id)</td><td>References event</td></tr>
+        <tr><td>participant_id</td><td>INT</td><td>FOREIGN KEY → participants(id)</td><td>References participant</td></tr>
+        <tr><td>registered_at</td><td>DATETIME</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>Registration timestamp</td></tr>
+    </table>
+
+
+    <!-- 3. SOURCE CODE -->
+    <div class="page-break"></div>
+    <h1>3. Source Code Plain Text Listings</h1>
+
+    <h2>3.1 Database DDL Schema (schema.sql / eventify_database.sql)</h2>
+    <pre class="code-block">-- ============================================================
+-- EVENTIFY DBMS PROJECT - COMPLETE MYSQL DATABASE SCRIPT
+-- Database Name: eventify_db
+-- ============================================================
+
+CREATE DATABASE IF NOT EXISTS `eventify_db`;
+USE `eventify_db`;
+
+-- ------------------------------------------------------------
+-- 1. TABLE: events
+-- Stores all event details hosted on the platform.
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS `registrations`;
+DROP TABLE IF EXISTS `events`;
+DROP TABLE IF EXISTS `participants`;
+
+CREATE TABLE `events` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(200) NOT NULL,
+    `description` TEXT NOT NULL,
+    `event_date` DATETIME NOT NULL,
+    `venue` VARCHAR(250) NOT NULL,
+    `max_seats` INT NOT NULL,
+    `category` VARCHAR(50) NOT NULL DEFAULT &#x27;workshop&#x27;,
+    `image_url` VARCHAR(500) NULL,
+    `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ------------------------------------------------------------
+-- 2. TABLE: participants
+-- Stores participant contact details.
+-- ------------------------------------------------------------
+CREATE TABLE `participants` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(150) NOT NULL,
+    `email` VARCHAR(254) NOT NULL UNIQUE,
+    `phone` VARCHAR(20) DEFAULT &#x27;&#x27;,
+    `college` VARCHAR(200) DEFAULT &#x27;&#x27;,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ------------------------------------------------------------
+-- 3. TABLE: registrations
+-- Junction table connecting participants to events (Many-to-Many).
+-- Includes UNIQUE constraint to prevent duplicate registrations.
+-- ------------------------------------------------------------
+CREATE TABLE `registrations` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `event_id` INT NOT NULL,
+    `participant_id` INT NOT NULL,
+    `registered_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT `fk_reg_event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_reg_participant` FOREIGN KEY (`participant_id`) REFERENCES `participants` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `unique_event_participant` UNIQUE (`event_id`, `participant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ============================================================
+-- SAMPLE DATA INSERTIONS
+-- ============================================================
+
+-- Insert Events
+INSERT INTO `events` (`id`, `name`, `description`, `event_date`, `venue`, `max_seats`, `category`, `image_url`) VALUES
+(1, &#x27;HackFusion 2024&#x27;, &#x27;A 24-hour national level hackathon bringing together coders, designers, and innovators to build AI solutions.&#x27;, &#x27;2026-10-25 09:00:00&#x27;, &#x27;Main Auditorium, Block A&#x27;, 50, &#x27;hackathon&#x27;, &#x27;https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&#x27;),
+(2, &#x27;Full-Stack Web Dev Workshop&#x27;, &#x27;Hands-on practical session covering HTML5, CSS Grid, React, Django REST Framework, and MySQL integration.&#x27;, &#x27;2026-10-28 14:00:00&#x27;, &#x27;Computer Lab 3, IT Building&#x27;, 40, &#x27;workshop&#x27;, &#x27;https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&#x27;),
+(3, &#x27;AI &amp; Future Tech Seminar&#x27;, &#x27;Expert talk by industry leaders from Google DeepMind and Microsoft on Generative AI and LLMs.&#x27;, &#x27;2026-11-02 10:30:00&#x27;, &#x27;Mini Seminar Hall 2&#x27;, 100, &#x27;seminar&#x27;, &#x27;https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&#x27;),
+(4, &#x27;Cloud Architecture Webinar&#x27;, &#x27;Online session explaining Microservices, Docker, Kubernetes, and AWS deployment pipelines.&#x27;, &#x27;2026-11-05 18:00:00&#x27;, &#x27;Zoom / Google Meet Online&#x27;, 200, &#x27;webinar&#x27;, &#x27;https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&#x27;),
+(5, &#x27;UI/UX Design Masterclass&#x27;, &#x27;Master Figma, design systems, modern typography, glassmorphism aesthetics, and accessibility.&#x27;, &#x27;2026-11-10 11:00:00&#x27;, &#x27;Design Studio, 4th Floor&#x27;, 30, &#x27;workshop&#x27;, &#x27;https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&#x27;),
+(6, &#x27;CyberSecurity Capture The Flag (CTF)&#x27;, &#x27;Ethical hacking competition testing skills in cryptography, web security, and reverse engineering.&#x27;, &#x27;2026-11-15 09:30:00&#x27;, &#x27;Cybersecurity Lab, 2nd Floor&#x27;, 25, &#x27;competition&#x27;, &#x27;https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&#x27;),
+(7, &#x27;DevOps &amp; CI/CD Summit&#x27;, &#x27;Conference on modern software delivery, pipeline automation, continuous testing, and monitoring.&#x27;, &#x27;2026-11-20 09:00:00&#x27;, &#x27;Grand Convention Center&#x27;, 150, &#x27;conference&#x27;, &#x27;https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&#x27;),
+(8, &#x27;Open Source Developers Meetup&#x27;, &#x27;Community gathering for open-source contributors, GitHub maintainers, and tech enthusiasts.&#x27;, &#x27;2026-11-25 16:00:00&#x27;, &#x27;Innovation Hub, Central Library&#x27;, 60, &#x27;meetup&#x27;, &#x27;https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&#x27;);
+
+-- Insert Participants
+INSERT INTO `participants` (`id`, `name`, `email`, `phone`, `college`) VALUES
+(1, &#x27;Aarav Sharma&#x27;, &#x27;aarav.sharma@example.com&#x27;, &#x27;9876543210&#x27;, &#x27;IIT Madras&#x27;),
+(2, &#x27;Ananya Sen&#x27;, &#x27;ananya.sen@example.com&#x27;, &#x27;9876543211&#x27;, &#x27;NIT Trichy&#x27;),
+(3, &#x27;Rohan Verma&#x27;, &#x27;rohan.verma@example.com&#x27;, &#x27;9876543212&#x27;, &#x27;Anna University&#x27;),
+(4, &#x27;Priya Patel&#x27;, &#x27;priya.patel@example.com&#x27;, &#x27;9876543213&#x27;, &#x27;BITS Pilani&#x27;),
+(5, &#x27;Vikram Singh&#x27;, &#x27;vikram.singh@example.com&#x27;, &#x27;9876543214&#x27;, &#x27;SRM Institute&#x27;),
+(6, &#x27;Sneha Reddy&#x27;, &#x27;sneha.reddy@example.com&#x27;, &#x27;9876543215&#x27;, &#x27;VIT Vellore&#x27;),
+(7, &#x27;Karthik Raja&#x27;, &#x27;karthik.raja@example.com&#x27;, &#x27;9876543216&#x27;, &#x27;PSG College of Tech&#x27;),
+(8, &#x27;Diya Mukherji&#x27;, &#x27;diya.m@example.com&#x27;, &#x27;9876543217&#x27;, &#x27;Jadavpur University&#x27;);
+
+-- Insert Registrations
+INSERT INTO `registrations` (`event_id`, `participant_id`, `registered_at`) VALUES
+(1, 1, &#x27;2026-10-06 10:00:00&#x27;),
+(1, 2, &#x27;2026-10-06 10:15:00&#x27;),
+(1, 3, &#x27;2026-10-06 10:30:00&#x27;),
+(1, 4, &#x27;2026-10-06 10:45:00&#x27;),
+(1, 5, &#x27;2026-10-06 11:00:00&#x27;),
+(2, 2, &#x27;2026-10-06 11:15:00&#x27;),
+(2, 6, &#x27;2026-10-06 11:30:00&#x27;),
+(2, 7, &#x27;2026-10-06 11:45:00&#x27;),
+(3, 1, &#x27;2026-10-06 12:00:00&#x27;),
+(3, 3, &#x27;2026-10-06 12:15:00&#x27;),
+(3, 8, &#x27;2026-10-06 12:30:00&#x27;),
+(4, 4, &#x27;2026-10-06 12:45:00&#x27;),
+(4, 5, &#x27;2026-10-06 13:00:00&#x27;),
+(5, 6, &#x27;2026-10-06 13:15:00&#x27;),
+(5, 8, &#x27;2026-10-06 13:30:00&#x27;),
+(6, 1, &#x27;2026-10-06 13:45:00&#x27;),
+(6, 7, &#x27;2026-10-06 14:00:00&#x27;),
+(7, 2, &#x27;2026-10-06 14:15:00&#x27;),
+(7, 3, &#x27;2026-10-06 14:30:00&#x27;),
+(7, 4, &#x27;2026-10-06 14:45:00&#x27;),
+(8, 5, &#x27;2026-10-06 15:00:00&#x27;),
+(8, 6, &#x27;2026-10-06 15:15:00&#x27;);
+</pre>
+
+    <div class="page-break"></div>
+    <h2>3.2 Backend Models (backend/events/models.py)</h2>
+    <pre class="code-block">&quot;&quot;&quot;
+Database Models for Eventify - Event Registration System.
+
+This module defines three core tables that demonstrate relational database design:
+  1. Event       - Stores event details (name, date, venue, max_seats, etc.)
+  2. Participant - Stores participant information (name, email, phone)
+  3. Registration - Links participants to events (many-to-many with metadata)
+
+Key Database Concepts Demonstrated:
+  - Primary Keys (auto-generated BigAutoField)
+  - Foreign Keys (Registration → Event, Registration → Participant)
+  - Unique Constraints (one registration per participant per event)
+  - Data Types (CharField, TextField, DateTimeField, IntegerField, EmailField)
+  - Indexes (for faster lookups)
+&quot;&quot;&quot;
+
+from django.db import models
+from django.core.validators import MinValueValidator
+
+
+class Event(models.Model):
+    &quot;&quot;&quot;
+    Event table - Stores information about each event/hackathon.
+
+    SQL Equivalent:
+        CREATE TABLE events_event (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(200) NOT NULL,
+            description TEXT NOT NULL,
+            event_date DATETIME NOT NULL,
+            venue VARCHAR(300) NOT NULL,
+            max_seats INT NOT NULL CHECK (max_seats &gt;= 1),
+            category VARCHAR(50) NOT NULL,
+            image_url VARCHAR(500),
+            is_active TINYINT(1) DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );
+    &quot;&quot;&quot;
+
+    CATEGORY_CHOICES = [
+        (&#x27;hackathon&#x27;, &#x27;Hackathon&#x27;),
+        (&#x27;workshop&#x27;, &#x27;Workshop&#x27;),
+        (&#x27;seminar&#x27;, &#x27;Seminar&#x27;),
+        (&#x27;webinar&#x27;, &#x27;Webinar&#x27;),
+        (&#x27;conference&#x27;, &#x27;Conference&#x27;),
+        (&#x27;meetup&#x27;, &#x27;Meetup&#x27;),
+        (&#x27;competition&#x27;, &#x27;Competition&#x27;),
+    ]
+
+    name = models.CharField(max_length=200, help_text=&quot;Name of the event&quot;)
+    description = models.TextField(help_text=&quot;Detailed description of the event&quot;)
+    event_date = models.DateTimeField(help_text=&quot;Date and time of the event&quot;)
+    venue = models.CharField(max_length=300, help_text=&quot;Location/venue of the event&quot;)
+    max_seats = models.IntegerField(
+        validators=[MinValueValidator(1)],
+        help_text=&quot;Maximum number of seats available&quot;
+    )
+    category = models.CharField(
+        max_length=50,
+        choices=CATEGORY_CHOICES,
+        default=&#x27;hackathon&#x27;,
+        help_text=&quot;Category of the event&quot;
+    )
+    image_url = models.URLField(
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=&quot;URL for event banner image&quot;
+    )
+    is_active = models.BooleanField(default=True, help_text=&quot;Whether the event is active&quot;)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = &#x27;events&#x27;
+        ordering = [&#x27;event_date&#x27;]
+        indexes = [
+            models.Index(fields=[&#x27;event_date&#x27;], name=&#x27;idx_event_date&#x27;),
+            models.Index(fields=[&#x27;category&#x27;], name=&#x27;idx_event_category&#x27;),
+            models.Index(fields=[&#x27;is_active&#x27;], name=&#x27;idx_event_active&#x27;),
+        ]
+
+    def __str__(self):
+        return f&quot;{self.name} ({self.event_date.strftime(&#x27;%Y-%m-%d&#x27;)})&quot;
+
+    @property
+    def registered_count(self):
+        &quot;&quot;&quot;Count of registrations for this event (uses COUNT query).&quot;&quot;&quot;
+        return self.registrations.count()
+
+    @property
+    def seats_left(self):
+        &quot;&quot;&quot;Calculate remaining seats (max_seats - registered_count).&quot;&quot;&quot;
+        return max(0, self.max_seats - self.registered_count)
+
+    @property
+    def is_full(self):
+        &quot;&quot;&quot;Check if event has no seats left.&quot;&quot;&quot;
+        return self.seats_left == 0
+
+
+class Participant(models.Model):
+    &quot;&quot;&quot;
+    Participant table - Stores information about registered participants.
+
+    SQL Equivalent:
+        CREATE TABLE participants (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(200) NOT NULL,
+            email VARCHAR(254) NOT NULL UNIQUE,
+            phone VARCHAR(15),
+            college VARCHAR(200),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    &quot;&quot;&quot;
+
+    name = models.CharField(max_length=200, help_text=&quot;Full name of the participant&quot;)
+    email = models.EmailField(unique=True, help_text=&quot;Email address (unique identifier)&quot;)
+    phone = models.CharField(max_length=15, blank=True, help_text=&quot;Phone number&quot;)
+    college = models.CharField(max_length=200, blank=True, help_text=&quot;College/University name&quot;)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = &#x27;participants&#x27;
+        ordering = [&#x27;name&#x27;]
+        indexes = [
+            models.Index(fields=[&#x27;email&#x27;], name=&#x27;idx_participant_email&#x27;),
+        ]
+
+    def __str__(self):
+        return f&quot;{self.name} ({self.email})&quot;
+
+
+class Registration(models.Model):
+    &quot;&quot;&quot;
+    Registration table - Junction/bridge table linking Participants to Events.
+    This demonstrates a Many-to-Many relationship with additional metadata.
+
+    SQL Equivalent:
+        CREATE TABLE registrations (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            event_id BIGINT NOT NULL,
+            participant_id BIGINT NOT NULL,
+            registered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+            FOREIGN KEY (participant_id) REFERENCES participants(id) ON DELETE CASCADE,
+            UNIQUE KEY unique_registration (event_id, participant_id)
+        );
+    &quot;&quot;&quot;
+
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name=&#x27;registrations&#x27;,
+        help_text=&quot;Foreign Key → Event table&quot;
+    )
+    participant = models.ForeignKey(
+        Participant,
+        on_delete=models.CASCADE,
+        related_name=&#x27;registrations&#x27;,
+        help_text=&quot;Foreign Key → Participant table&quot;
+    )
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = &#x27;registrations&#x27;
+        # Unique constraint: one person can register for an event only once
+        unique_together = [&#x27;event&#x27;, &#x27;participant&#x27;]
+        ordering = [&#x27;-registered_at&#x27;]
+        indexes = [
+            models.Index(fields=[&#x27;event&#x27;, &#x27;participant&#x27;], name=&#x27;idx_reg_event_participant&#x27;),
+        ]
+
+    def __str__(self):
+        return f&quot;{self.participant.name} → {self.event.name}&quot;
+</pre>
+
+    <div class="page-break"></div>
+    <h2>3.3 Backend API Controller Views (backend/events/views.py)</h2>
+    <pre class="code-block">&quot;&quot;&quot;
+API Views for Eventify - Event Registration System.
+
+Each view demonstrates a different type of database operation:
+  - EventListView:        SELECT all events (with optional filtering)
+  - EventDetailView:      SELECT single event by ID
+  - EventCreateView:      INSERT new event
+  - EventUpdateView:      UPDATE event by ID
+  - EventDeleteView:      DELETE event by ID
+  - RegisterView:         INSERT participant + INSERT registration (transaction)
+  - EventRegistrations:   SELECT with JOIN (registrations + participant details)
+  - DashboardStats:       Aggregate queries (COUNT, SUM)
+  - SearchEvents:         SELECT with WHERE + LIKE (search/filter)
+&quot;&quot;&quot;
+
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db.models import Q, Count, Sum
+from django.utils import timezone
+
+from .models import Event, Participant, Registration
+from .serializers import (
+    EventSerializer,
+    ParticipantSerializer,
+    RegistrationSerializer,
+    EventRegistrationSerializer,
+)
+
+
+# ============================================================
+# EVENT CRUD OPERATIONS
+# ============================================================
+
+@api_view([&#x27;GET&#x27;])
+def event_list(request):
+    &quot;&quot;&quot;
+    GET /api/events/
+    Fetch all active events from the database.
+
+    SQL: SELECT * FROM events WHERE is_active = 1 ORDER BY event_date;
+
+    Optional query params:
+      ?category=hackathon  → Filter by category
+      ?upcoming=true       → Only future events
+    &quot;&quot;&quot;
+    events = Event.objects.filter(is_active=True)
+
+    # Filter by category if provided
+    category = request.query_params.get(&#x27;category&#x27;)
+    if category:
+        events = events.filter(category=category)
+
+    # Filter upcoming events only
+    upcoming = request.query_params.get(&#x27;upcoming&#x27;)
+    if upcoming == &#x27;true&#x27;:
+        events = events.filter(event_date__gte=timezone.now())
+
+    serializer = EventSerializer(events, many=True)
+    return Response({
+        &#x27;status&#x27;: &#x27;success&#x27;,
+        &#x27;count&#x27;: events.count(),
+        &#x27;data&#x27;: serializer.data
+    })
+
+
+@api_view([&#x27;GET&#x27;])
+def event_detail(request, event_id):
+    &quot;&quot;&quot;
+    GET /api/events/&lt;id&gt;/
+    Fetch a single event by its primary key.
+
+    SQL: SELECT * FROM events WHERE id = &lt;event_id&gt;;
+    &quot;&quot;&quot;
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return Response(
+            {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;message&#x27;: &#x27;Event not found&#x27;},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    serializer = EventSerializer(event)
+    return Response({&#x27;status&#x27;: &#x27;success&#x27;, &#x27;data&#x27;: serializer.data})
+
+
+@api_view([&#x27;POST&#x27;])
+def event_create(request):
+    &quot;&quot;&quot;
+    POST /api/events/create/
+    Create a new event in the database.
+
+    SQL: INSERT INTO events (name, description, event_date, venue, max_seats, category)
+         VALUES (...);
+    &quot;&quot;&quot;
+    serializer = EventSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {&#x27;status&#x27;: &#x27;success&#x27;, &#x27;message&#x27;: &#x27;Event created successfully&#x27;, &#x27;data&#x27;: serializer.data},
+            status=status.HTTP_201_CREATED
+        )
+    return Response(
+        {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;errors&#x27;: serializer.errors},
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
+
+@api_view([&#x27;PUT&#x27;])
+def event_update(request, event_id):
+    &quot;&quot;&quot;
+    PUT /api/events/&lt;id&gt;/update/
+    Update an existing event.
+
+    SQL: UPDATE events SET name=..., description=... WHERE id = &lt;event_id&gt;;
+    &quot;&quot;&quot;
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return Response(
+            {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;message&#x27;: &#x27;Event not found&#x27;},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    serializer = EventSerializer(event, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {&#x27;status&#x27;: &#x27;success&#x27;, &#x27;message&#x27;: &#x27;Event updated successfully&#x27;, &#x27;data&#x27;: serializer.data}
+        )
+    return Response(
+        {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;errors&#x27;: serializer.errors},
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
+
+@api_view([&#x27;DELETE&#x27;])
+def event_delete(request, event_id):
+    &quot;&quot;&quot;
+    DELETE /api/events/&lt;id&gt;/delete/
+    Delete an event from the database.
+
+    SQL: DELETE FROM events WHERE id = &lt;event_id&gt;;
+    (This also cascades to delete related registrations)
+    &quot;&quot;&quot;
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return Response(
+            {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;message&#x27;: &#x27;Event not found&#x27;},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    event_name = event.name
+    event.delete()
+    return Response(
+        {&#x27;status&#x27;: &#x27;success&#x27;, &#x27;message&#x27;: f&#x27;Event &quot;{event_name}&quot; deleted successfully&#x27;},
+        status=status.HTTP_200_OK
+    )
+
+
+# ============================================================
+# REGISTRATION (Core: Frontend → Backend → Database)
+# ============================================================
+
+@api_view([&#x27;POST&#x27;])
+def register_for_event(request):
+    &quot;&quot;&quot;
+    POST /api/register/
+    Register a participant for an event.
+
+    This endpoint demonstrates the full flow:
+      1. Frontend sends JSON data via fetch()
+      2. Backend validates the data
+      3. Backend executes INSERT queries on MySQL
+      4. Backend returns JSON response to frontend
+
+    SQL Operations:
+      - SELECT * FROM participants WHERE email = &#x27;...&#x27;;   (check existing)
+      - INSERT INTO participants (...) VALUES (...);       (if new)
+      - INSERT INTO registrations (event_id, participant_id) VALUES (...);
+    &quot;&quot;&quot;
+    serializer = EventRegistrationSerializer(data=request.data)
+    if serializer.is_valid():
+        try:
+            registration = serializer.save()
+            return Response({
+                &#x27;status&#x27;: &#x27;success&#x27;,
+                &#x27;message&#x27;: f&#x27;Successfully registered for {registration.event.name}!&#x27;,
+                &#x27;data&#x27;: {
+                    &#x27;registration_id&#x27;: registration.id,
+                    &#x27;event&#x27;: registration.event.name,
+                    &#x27;participant&#x27;: registration.participant.name,
+                    &#x27;seats_left&#x27;: registration.event.seats_left,
+                }
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response(
+                {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;message&#x27;: str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    return Response(
+        {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;errors&#x27;: serializer.errors},
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
+
+# ============================================================
+# REGISTRATION LIST (JOIN Query)
+# ============================================================
+
+@api_view([&#x27;GET&#x27;])
+def event_registrations(request, event_id):
+    &quot;&quot;&quot;
+    GET /api/events/&lt;id&gt;/registrations/
+    Get all registrations for a specific event with participant details.
+
+    SQL: SELECT r.*, p.name, p.email
+         FROM registrations r
+         JOIN participants p ON r.participant_id = p.id
+         WHERE r.event_id = &lt;event_id&gt;;
+    &quot;&quot;&quot;
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return Response(
+            {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;message&#x27;: &#x27;Event not found&#x27;},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    registrations = Registration.objects.filter(event=event).select_related(&#x27;participant&#x27;)
+    serializer = RegistrationSerializer(registrations, many=True)
+
+    return Response({
+        &#x27;status&#x27;: &#x27;success&#x27;,
+        &#x27;event&#x27;: event.name,
+        &#x27;total_registrations&#x27;: registrations.count(),
+        &#x27;seats_left&#x27;: event.seats_left,
+        &#x27;data&#x27;: serializer.data
+    })
+
+
+# ============================================================
+# DASHBOARD STATISTICS (Aggregate Queries)
+# ============================================================
+
+@api_view([&#x27;GET&#x27;])
+def dashboard_stats(request):
+    &quot;&quot;&quot;
+    GET /api/dashboard/
+    Get aggregate statistics for the dashboard.
+
+    SQL:
+      - SELECT COUNT(*) FROM events WHERE is_active = 1;
+      - SELECT COUNT(*) FROM participants;
+      - SELECT COUNT(*) FROM registrations;
+      - SELECT SUM(max_seats) FROM events WHERE is_active = 1;
+    &quot;&quot;&quot;
+    total_events = Event.objects.filter(is_active=True).count()
+    total_participants = Participant.objects.count()
+    total_registrations = Registration.objects.count()
+    total_seats = Event.objects.filter(is_active=True).aggregate(
+        total=Sum(&#x27;max_seats&#x27;)
+    )[&#x27;total&#x27;] or 0
+
+    # Events with most registrations (GROUP BY + ORDER BY)
+    popular_events = Event.objects.filter(is_active=True).annotate(
+        reg_count=Count(&#x27;registrations&#x27;)
+    ).order_by(&#x27;-reg_count&#x27;)[:5]
+
+    popular_data = [
+        {
+            &#x27;id&#x27;: e.id,
+            &#x27;name&#x27;: e.name,
+            &#x27;category&#x27;: e.category,
+            &#x27;registrations&#x27;: e.reg_count,
+            &#x27;max_seats&#x27;: e.max_seats,
+            &#x27;seats_left&#x27;: e.seats_left,
+        }
+        for e in popular_events
+    ]
+
+    return Response({
+        &#x27;status&#x27;: &#x27;success&#x27;,
+        &#x27;data&#x27;: {
+            &#x27;total_events&#x27;: total_events,
+            &#x27;total_participants&#x27;: total_participants,
+            &#x27;total_registrations&#x27;: total_registrations,
+            &#x27;total_seats&#x27;: total_seats,
+            &#x27;popular_events&#x27;: popular_data,
+        }
+    })
+
+
+# ============================================================
+# SEARCH (WHERE + LIKE Query)
+# ============================================================
+
+@api_view([&#x27;GET&#x27;])
+def search_events(request):
+    &quot;&quot;&quot;
+    GET /api/events/search/?q=python
+    Search events by name, description, or venue.
+
+    SQL: SELECT * FROM events
+         WHERE (name LIKE &#x27;%python%&#x27; OR description LIKE &#x27;%python%&#x27; OR venue LIKE &#x27;%python%&#x27;)
+         AND is_active = 1;
+    &quot;&quot;&quot;
+    query = request.query_params.get(&#x27;q&#x27;, &#x27;&#x27;)
+    if not query:
+        return Response(
+            {&#x27;status&#x27;: &#x27;error&#x27;, &#x27;message&#x27;: &#x27;Please provide a search query (?q=...)&#x27;},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    events = Event.objects.filter(
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
+        Q(venue__icontains=query),
+        is_active=True
+    )
+
+    serializer = EventSerializer(events, many=True)
+    return Response({
+        &#x27;status&#x27;: &#x27;success&#x27;,
+        &#x27;query&#x27;: query,
+        &#x27;count&#x27;: events.count(),
+        &#x27;data&#x27;: serializer.data
+    })
+
+
+# ============================================================
+# ALL PARTICIPANTS LIST
+# ============================================================
+
+@api_view([&#x27;GET&#x27;])
+def participant_list(request):
+    &quot;&quot;&quot;
+    GET /api/participants/
+    List all registered participants.
+
+    SQL: SELECT * FROM participants ORDER BY name;
+    &quot;&quot;&quot;
+    participants = Participant.objects.all()
+    serializer = ParticipantSerializer(participants, many=True)
+    return Response({
+        &#x27;status&#x27;: &#x27;success&#x27;,
+        &#x27;count&#x27;: participants.count(),
+        &#x27;data&#x27;: serializer.data
+    })
+</pre>
+
+    <div class="page-break"></div>
+    <h2>3.4 Frontend User Interface Markup (frontend/index.html)</h2>
+    <pre class="code-block">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;Eventify - A full-stack Event Registration System demonstrating frontend-backend-database connectivity using Django, MySQL, and vanilla JavaScript.&quot;&gt;
+    &lt;title&gt;Eventify — Event Registration System&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;data:image/svg+xml,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 100 100&#x27;&gt;&lt;text y=&#x27;.9em&#x27; font-size=&#x27;90&#x27;&gt;🎯&lt;/text&gt;&lt;/svg&gt;&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;!-- ============================================================
+         NAVBAR
+         ============================================================ --&gt;
+    &lt;nav class=&quot;navbar&quot; id=&quot;navbar&quot;&gt;
+        &lt;div class=&quot;navbar-inner&quot;&gt;
+            &lt;a href=&quot;#&quot; class=&quot;navbar-brand&quot; onclick=&quot;navigateTo(&#x27;home&#x27;)&quot;&gt;
+                &lt;div class=&quot;navbar-logo&quot;&gt;🎯&lt;/div&gt;
+                &lt;span class=&quot;navbar-title&quot;&gt;Eventify&lt;/span&gt;
+            &lt;/a&gt;
+
+            &lt;button class=&quot;hamburger&quot; id=&quot;hamburger&quot; onclick=&quot;toggleMobileNav()&quot; aria-label=&quot;Toggle navigation&quot;&gt;
+                ☰
+            &lt;/button&gt;
+
+            &lt;ul class=&quot;navbar-nav&quot; id=&quot;navbarNav&quot;&gt;
+                &lt;li&gt;&lt;button class=&quot;nav-link active&quot; data-page=&quot;home&quot; onclick=&quot;navigateTo(&#x27;home&#x27;)&quot;&gt;
+                    &lt;span class=&quot;nav-link-icon&quot;&gt;🏠&lt;/span&gt; Home
+                &lt;/button&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;button class=&quot;nav-link&quot; data-page=&quot;events&quot; onclick=&quot;navigateTo(&#x27;events&#x27;)&quot;&gt;
+                    &lt;span class=&quot;nav-link-icon&quot;&gt;📅&lt;/span&gt; Events
+                &lt;/button&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;button class=&quot;nav-link&quot; data-page=&quot;registrations&quot; onclick=&quot;navigateTo(&#x27;registrations&#x27;)&quot;&gt;
+                    &lt;span class=&quot;nav-link-icon&quot;&gt;📋&lt;/span&gt; Registrations
+                &lt;/button&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;button class=&quot;nav-link&quot; data-page=&quot;participants&quot; onclick=&quot;navigateTo(&#x27;participants&#x27;)&quot;&gt;
+                    &lt;span class=&quot;nav-link-icon&quot;&gt;👥&lt;/span&gt; Participants
+                &lt;/button&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;button class=&quot;nav-link&quot; data-page=&quot;admin&quot; onclick=&quot;navigateTo(&#x27;admin&#x27;)&quot;&gt;
+                    &lt;span class=&quot;nav-link-icon&quot;&gt;⚙️&lt;/span&gt; Admin
+                &lt;/button&gt;&lt;/li&gt;
+                &lt;li&gt;
+                    &lt;span class=&quot;db-status disconnected&quot; id=&quot;dbStatus&quot;&gt;
+                        &lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;
+                        &lt;span id=&quot;dbStatusText&quot;&gt;Connecting...&lt;/span&gt;
+                    &lt;/span&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+
+    &lt;!-- Toast Container --&gt;
+    &lt;div class=&quot;toast-container&quot; id=&quot;toastContainer&quot;&gt;&lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         HOME PAGE
+         ============================================================ --&gt;
+    &lt;div class=&quot;page active&quot; id=&quot;page-home&quot;&gt;
+        &lt;!-- Hero --&gt;
+        &lt;section class=&quot;hero&quot;&gt;
+            &lt;div class=&quot;hero-badge&quot;&gt;
+                &lt;span class=&quot;pulse-dot&quot;&gt;&lt;/span&gt;
+                Full-Stack DBMS Project — Django + MySQL
+            &lt;/div&gt;
+            &lt;h1&gt;
+                Discover &amp; Register for&lt;br&gt;
+                &lt;span class=&quot;gradient-text&quot;&gt;Amazing Events&lt;/span&gt;
+            &lt;/h1&gt;
+            &lt;p class=&quot;hero-subtitle&quot;&gt;
+                A complete Event Registration System demonstrating real-time database connectivity between Frontend (HTML/CSS/JS) → Backend (Django REST API) → Database (MySQL).
+            &lt;/p&gt;
+            &lt;div class=&quot;hero-actions&quot;&gt;
+                &lt;button class=&quot;btn btn-primary btn-lg&quot; onclick=&quot;navigateTo(&#x27;events&#x27;)&quot;&gt;
+                    📅 Browse Events
+                &lt;/button&gt;
+                &lt;button class=&quot;btn btn-outline btn-lg&quot; onclick=&quot;navigateTo(&#x27;admin&#x27;)&quot;&gt;
+                    ⚙️ Admin Panel
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;!-- Stats --&gt;
+        &lt;div class=&quot;stats-bar&quot; id=&quot;statsBar&quot;&gt;
+            &lt;div class=&quot;stat-card&quot;&gt;
+                &lt;span class=&quot;stat-icon&quot;&gt;📅&lt;/span&gt;
+                &lt;div class=&quot;stat-value&quot; id=&quot;statEvents&quot;&gt;0&lt;/div&gt;
+                &lt;div class=&quot;stat-label&quot;&gt;Active Events&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;stat-card&quot;&gt;
+                &lt;span class=&quot;stat-icon&quot;&gt;👥&lt;/span&gt;
+                &lt;div class=&quot;stat-value&quot; id=&quot;statParticipants&quot;&gt;0&lt;/div&gt;
+                &lt;div class=&quot;stat-label&quot;&gt;Participants&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;stat-card&quot;&gt;
+                &lt;span class=&quot;stat-icon&quot;&gt;✅&lt;/span&gt;
+                &lt;div class=&quot;stat-value&quot; id=&quot;statRegistrations&quot;&gt;0&lt;/div&gt;
+                &lt;div class=&quot;stat-label&quot;&gt;Registrations&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;stat-card&quot;&gt;
+                &lt;span class=&quot;stat-icon&quot;&gt;💺&lt;/span&gt;
+                &lt;div class=&quot;stat-value&quot; id=&quot;statSeats&quot;&gt;0&lt;/div&gt;
+                &lt;div class=&quot;stat-label&quot;&gt;Total Seats&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Featured Events --&gt;
+        &lt;section class=&quot;section&quot;&gt;
+            &lt;div class=&quot;section-header&quot;&gt;
+                &lt;h2 class=&quot;section-title&quot;&gt;&lt;span class=&quot;icon&quot;&gt;🔥&lt;/span&gt; Featured Events&lt;/h2&gt;
+                &lt;button class=&quot;btn btn-ghost&quot; onclick=&quot;navigateTo(&#x27;events&#x27;)&quot;&gt;View All →&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;events-grid&quot; id=&quot;featuredEventsGrid&quot;&gt;
+                &lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         EVENTS PAGE
+         ============================================================ --&gt;
+    &lt;div class=&quot;page&quot; id=&quot;page-events&quot;&gt;
+        &lt;section class=&quot;section&quot; style=&quot;padding-top: 6rem;&quot;&gt;
+            &lt;div class=&quot;section-header&quot;&gt;
+                &lt;h2 class=&quot;section-title&quot;&gt;&lt;span class=&quot;icon&quot;&gt;📅&lt;/span&gt; All Events&lt;/h2&gt;
+                &lt;div style=&quot;display:flex; gap: var(--space-md); align-items: center; flex-wrap: wrap;&quot;&gt;
+                    &lt;div class=&quot;search-box&quot;&gt;
+                        &lt;span class=&quot;search-icon&quot;&gt;🔍&lt;/span&gt;
+                        &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;searchInput&quot; placeholder=&quot;Search events...&quot; oninput=&quot;handleSearch()&quot;&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Category Filters --&gt;
+            &lt;div class=&quot;filter-pills&quot; style=&quot;margin-bottom: var(--space-xl);&quot;&gt;
+                &lt;button class=&quot;filter-pill active&quot; data-category=&quot;all&quot; onclick=&quot;filterByCategory(&#x27;all&#x27;, this)&quot;&gt;All&lt;/button&gt;
+                &lt;button class=&quot;filter-pill&quot; data-category=&quot;hackathon&quot; onclick=&quot;filterByCategory(&#x27;hackathon&#x27;, this)&quot;&gt;🏆 Hackathon&lt;/button&gt;
+                &lt;button class=&quot;filter-pill&quot; data-category=&quot;workshop&quot; onclick=&quot;filterByCategory(&#x27;workshop&#x27;, this)&quot;&gt;🔧 Workshop&lt;/button&gt;
+                &lt;button class=&quot;filter-pill&quot; data-category=&quot;seminar&quot; onclick=&quot;filterByCategory(&#x27;seminar&#x27;, this)&quot;&gt;🎤 Seminar&lt;/button&gt;
+                &lt;button class=&quot;filter-pill&quot; data-category=&quot;webinar&quot; onclick=&quot;filterByCategory(&#x27;webinar&#x27;, this)&quot;&gt;💻 Webinar&lt;/button&gt;
+                &lt;button class=&quot;filter-pill&quot; data-category=&quot;conference&quot; onclick=&quot;filterByCategory(&#x27;conference&#x27;, this)&quot;&gt;🌐 Conference&lt;/button&gt;
+                &lt;button class=&quot;filter-pill&quot; data-category=&quot;meetup&quot; onclick=&quot;filterByCategory(&#x27;meetup&#x27;, this)&quot;&gt;🤝 Meetup&lt;/button&gt;
+                &lt;button class=&quot;filter-pill&quot; data-category=&quot;competition&quot; onclick=&quot;filterByCategory(&#x27;competition&#x27;, this)&quot;&gt;⚡ Competition&lt;/button&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;events-grid&quot; id=&quot;allEventsGrid&quot;&gt;
+                &lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         REGISTRATIONS PAGE
+         ============================================================ --&gt;
+    &lt;div class=&quot;page&quot; id=&quot;page-registrations&quot;&gt;
+        &lt;section class=&quot;section&quot; style=&quot;padding-top: 6rem;&quot;&gt;
+            &lt;div class=&quot;section-header&quot;&gt;
+                &lt;h2 class=&quot;section-title&quot;&gt;&lt;span class=&quot;icon&quot;&gt;📋&lt;/span&gt; Registrations&lt;/h2&gt;
+                &lt;div class=&quot;search-box&quot;&gt;
+                    &lt;span class=&quot;search-icon&quot;&gt;🔍&lt;/span&gt;
+                    &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;regEventSearch&quot; placeholder=&quot;Select event to view registrations...&quot; onfocus=&quot;showEventDropdown()&quot;&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div id=&quot;eventSelectorCards&quot; class=&quot;events-grid&quot; style=&quot;margin-bottom: var(--space-xl);&quot;&gt;&lt;/div&gt;
+
+            &lt;div id=&quot;registrationsContent&quot;&gt;
+                &lt;div class=&quot;empty-state&quot;&gt;
+                    &lt;div class=&quot;empty-icon&quot;&gt;📋&lt;/div&gt;
+                    &lt;h3&gt;Select an Event&lt;/h3&gt;
+                    &lt;p&gt;Choose an event above to view its registrations and participant details.&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         PARTICIPANTS PAGE
+         ============================================================ --&gt;
+    &lt;div class=&quot;page&quot; id=&quot;page-participants&quot;&gt;
+        &lt;section class=&quot;section&quot; style=&quot;padding-top: 6rem;&quot;&gt;
+            &lt;div class=&quot;section-header&quot;&gt;
+                &lt;h2 class=&quot;section-title&quot;&gt;&lt;span class=&quot;icon&quot;&gt;👥&lt;/span&gt; All Participants&lt;/h2&gt;
+                &lt;span class=&quot;db-status connected&quot;&gt;
+                    &lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;
+                    SELECT * FROM participants
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div id=&quot;participantsContent&quot;&gt;
+                &lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         ADMIN PAGE
+         ============================================================ --&gt;
+    &lt;div class=&quot;page&quot; id=&quot;page-admin&quot;&gt;
+        &lt;section class=&quot;section&quot; style=&quot;padding-top: 6rem;&quot;&gt;
+            &lt;div class=&quot;admin-header&quot;&gt;
+                &lt;h2 class=&quot;section-title&quot;&gt;&lt;span class=&quot;icon&quot;&gt;⚙️&lt;/span&gt; Admin Panel&lt;/h2&gt;
+                &lt;button class=&quot;btn btn-primary&quot; onclick=&quot;openCreateEventModal()&quot;&gt;
+                    ➕ Create Event
+                &lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div id=&quot;adminEventsContent&quot;&gt;
+                &lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         REGISTRATION MODAL
+         ============================================================ --&gt;
+    &lt;div class=&quot;modal-overlay&quot; id=&quot;registerModal&quot;&gt;
+        &lt;div class=&quot;modal&quot;&gt;
+            &lt;div class=&quot;modal-header&quot;&gt;
+                &lt;h3 class=&quot;modal-title&quot;&gt;📝 Register for Event&lt;/h3&gt;
+                &lt;button class=&quot;modal-close&quot; onclick=&quot;closeModal(&#x27;registerModal&#x27;)&quot;&gt;&amp;times;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-body&quot;&gt;
+                &lt;div class=&quot;form-group&quot;&gt;
+                    &lt;p style=&quot;color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-md);&quot;&gt;
+                        Registering for: &lt;strong id=&quot;registerEventName&quot; style=&quot;color: var(--primary-300);&quot;&gt;&lt;/strong&gt;
+                    &lt;/p&gt;
+                &lt;/div&gt;
+                &lt;form id=&quot;registerForm&quot; onsubmit=&quot;handleRegistration(event)&quot;&gt;
+                    &lt;input type=&quot;hidden&quot; id=&quot;registerEventId&quot;&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;label class=&quot;form-label&quot;&gt;Full Name &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;regName&quot; placeholder=&quot;Enter your full name&quot; required&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;form-row&quot;&gt;
+                        &lt;div class=&quot;form-group&quot;&gt;
+                            &lt;label class=&quot;form-label&quot;&gt;Email &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                            &lt;input type=&quot;email&quot; class=&quot;form-input&quot; id=&quot;regEmail&quot; placeholder=&quot;your@email.com&quot; required&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;form-group&quot;&gt;
+                            &lt;label class=&quot;form-label&quot;&gt;Phone&lt;/label&gt;
+                            &lt;input type=&quot;tel&quot; class=&quot;form-input&quot; id=&quot;regPhone&quot; placeholder=&quot;9876543210&quot;&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;label class=&quot;form-label&quot;&gt;College / University&lt;/label&gt;
+                        &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;regCollege&quot; placeholder=&quot;Your college name&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;modal-footer&quot; style=&quot;padding: 0;&quot;&gt;
+                        &lt;button type=&quot;button&quot; class=&quot;btn btn-outline&quot; onclick=&quot;closeModal(&#x27;registerModal&#x27;)&quot;&gt;Cancel&lt;/button&gt;
+                        &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot; id=&quot;registerSubmitBtn&quot;&gt;
+                            ✅ Register Now
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         CREATE / EDIT EVENT MODAL
+         ============================================================ --&gt;
+    &lt;div class=&quot;modal-overlay&quot; id=&quot;eventModal&quot;&gt;
+        &lt;div class=&quot;modal&quot; style=&quot;max-width: 600px;&quot;&gt;
+            &lt;div class=&quot;modal-header&quot;&gt;
+                &lt;h3 class=&quot;modal-title&quot; id=&quot;eventModalTitle&quot;&gt;➕ Create New Event&lt;/h3&gt;
+                &lt;button class=&quot;modal-close&quot; onclick=&quot;closeModal(&#x27;eventModal&#x27;)&quot;&gt;&amp;times;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-body&quot;&gt;
+                &lt;form id=&quot;eventForm&quot; onsubmit=&quot;handleEventSubmit(event)&quot;&gt;
+                    &lt;input type=&quot;hidden&quot; id=&quot;eventFormId&quot;&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;label class=&quot;form-label&quot;&gt;Event Name &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;eventName&quot; placeholder=&quot;e.g., HackFusion 2024&quot; required&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;label class=&quot;form-label&quot;&gt;Description &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                        &lt;textarea class=&quot;form-textarea&quot; id=&quot;eventDesc&quot; placeholder=&quot;Describe your event...&quot; required&gt;&lt;/textarea&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;form-row&quot;&gt;
+                        &lt;div class=&quot;form-group&quot;&gt;
+                            &lt;label class=&quot;form-label&quot;&gt;Date &amp; Time &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                            &lt;input type=&quot;datetime-local&quot; class=&quot;form-input&quot; id=&quot;eventDate&quot; required&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;form-group&quot;&gt;
+                            &lt;label class=&quot;form-label&quot;&gt;Category &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                            &lt;select class=&quot;form-select&quot; id=&quot;eventCategory&quot; required&gt;
+                                &lt;option value=&quot;hackathon&quot;&gt;🏆 Hackathon&lt;/option&gt;
+                                &lt;option value=&quot;workshop&quot;&gt;🔧 Workshop&lt;/option&gt;
+                                &lt;option value=&quot;seminar&quot;&gt;🎤 Seminar&lt;/option&gt;
+                                &lt;option value=&quot;webinar&quot;&gt;💻 Webinar&lt;/option&gt;
+                                &lt;option value=&quot;conference&quot;&gt;🌐 Conference&lt;/option&gt;
+                                &lt;option value=&quot;meetup&quot;&gt;🤝 Meetup&lt;/option&gt;
+                                &lt;option value=&quot;competition&quot;&gt;⚡ Competition&lt;/option&gt;
+                            &lt;/select&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;form-row&quot;&gt;
+                        &lt;div class=&quot;form-group&quot;&gt;
+                            &lt;label class=&quot;form-label&quot;&gt;Venue &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                            &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;eventVenue&quot; placeholder=&quot;e.g., Main Auditorium&quot; required&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;form-group&quot;&gt;
+                            &lt;label class=&quot;form-label&quot;&gt;Max Seats &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                            &lt;input type=&quot;number&quot; class=&quot;form-input&quot; id=&quot;eventMaxSeats&quot; placeholder=&quot;100&quot; min=&quot;1&quot; required&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;label class=&quot;form-label&quot;&gt;Image URL&lt;/label&gt;
+                        &lt;input type=&quot;url&quot; class=&quot;form-input&quot; id=&quot;eventImageUrl&quot; placeholder=&quot;https://images.unsplash.com/...&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;modal-footer&quot; style=&quot;padding: 0;&quot;&gt;
+                        &lt;button type=&quot;button&quot; class=&quot;btn btn-outline&quot; onclick=&quot;closeModal(&#x27;eventModal&#x27;)&quot;&gt;Cancel&lt;/button&gt;
+                        &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot; id=&quot;eventSubmitBtn&quot;&gt;
+                            ✅ Create Event
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- ============================================================
+         FOOTER
+         ============================================================ --&gt;
+    &lt;footer class=&quot;footer&quot;&gt;
+        &lt;p&gt;
+            🎯 &lt;strong&gt;Eventify&lt;/strong&gt; — Full-Stack DBMS Project&lt;br&gt;
+            Built with Django + MySQL + HTML/CSS/JS&lt;br&gt;
+            &lt;span style=&quot;color: var(--text-tertiary);&quot;&gt;Demonstrating Frontend ↔ Backend ↔ Database Connectivity&lt;/span&gt;
+        &lt;/p&gt;
+    &lt;/footer&gt;
+
+
+    &lt;!-- JavaScript --&gt;
+    &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+    <div class="page-break"></div>
+    <h2>3.5 Frontend Styling System (frontend/css/style.css)</h2>
+    <pre class="code-block">/* ============================================================
+   EVENTIFY - Event Registration System
+   Premium Design System with Dark Mode &amp; Glassmorphism
+   ============================================================ */
+
+/* ---- Google Fonts Import ---- */
+@import url(&#x27;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap&#x27;);
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ============================================================ */
+:root {
+    /* Primary Palette - Electric Violet to Cyan */
+    --primary-50: #f0f0ff;
+    --primary-100: #e0dffe;
+    --primary-200: #c4bffd;
+    --primary-300: #a594fb;
+    --primary-400: #8b6cf7;
+    --primary-500: #7c3aed;
+    --primary-600: #6d28d9;
+    --primary-700: #5b21b6;
+    --primary-800: #4c1d95;
+    --primary-900: #3b0d81;
+
+    /* Accent - Cyan / Teal */
+    --accent-400: #22d3ee;
+    --accent-500: #06b6d4;
+    --accent-600: #0891b2;
+
+    /* Success / Warning / Error */
+    --success-500: #10b981;
+    --success-600: #059669;
+    --warning-500: #f59e0b;
+    --warning-600: #d97706;
+    --error-500: #ef4444;
+    --error-600: #dc2626;
+
+    /* Neutral (Dark Mode Base) */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #111118;
+    --bg-tertiary: #1a1a25;
+    --bg-card: rgba(26, 26, 37, 0.7);
+    --bg-glass: rgba(26, 26, 37, 0.5);
+    --bg-hover: rgba(124, 58, 237, 0.08);
+
+    --text-primary: #f1f1f4;
+    --text-secondary: #a1a1b5;
+    --text-tertiary: #6b6b80;
+    --text-accent: #c4bffd;
+
+    --border-color: rgba(124, 58, 237, 0.15);
+    --border-glass: rgba(255, 255, 255, 0.06);
+    --border-focus: var(--primary-400);
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, #7c3aed 0%, #06b6d4 50%, #10b981 100%);
+    --gradient-card: linear-gradient(145deg, rgba(124, 58, 237, 0.05) 0%, rgba(6, 182, 212, 0.03) 100%);
+    --gradient-accent: linear-gradient(135deg, #7c3aed, #06b6d4);
+    --gradient-glow: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124, 58, 237, 0.06), transparent 40%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.15);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(124, 58, 237, 0.08);
+
+    /* Typography */
+    --font-sans: &#x27;Inter&#x27;, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: &#x27;Space Grotesk&#x27;, &#x27;Inter&#x27;, sans-serif;
+
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    /* Transitions */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ============================================================
+   RESET &amp; BASE
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* Animated background gradient blobs */
+body::before {
+    content: &#x27;&#x27;;
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+    z-index: -1;
+    animation: bgFloat 20s ease-in-out infinite;
+}
+
+@keyframes bgFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(-2%, 1%) rotate(1deg); }
+    66% { transform: translate(1%, -2%) rotate(-1deg); }
+}
+
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: var(--space-md) var(--space-xl);
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border-glass);
+    transition: var(--transition-base);
+}
+
+.navbar.scrolled {
+    background: rgba(10, 10, 15, 0.95);
+    box-shadow: var(--shadow-md);
+}
+
+.navbar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    text-decoration: none;
+}
+
+.navbar-logo {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-accent);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: var(--transition-spring);
+}
+
+.navbar-brand:hover .navbar-logo {
+    transform: rotate(-10deg) scale(1.05);
+}
+
+.navbar-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    list-style: none;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+
+.nav-link.active {
+    color: var(--primary-300);
+}
+
+.nav-link-icon {
+    font-size: 1.1rem;
+}
+
+/* Mobile hamburger */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--space-sm);
+}
+
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero {
+    padding: 8rem var(--space-xl) 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: &#x27;&#x27;;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: heroPulse 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes heroPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    color: var(--primary-300);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: var(--space-lg);
+    animation: fadeInUp 0.6s ease;
+}
+
+.hero-badge .pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--success-500);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--space-lg);
+    animation: fadeInUp 0.6s ease 0.1s both;
+}
+
+.hero h1 .gradient-text {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto var(--space-2xl);
+    animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.6s ease 0.3s both;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: &#x27;&#x27;;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+.btn:hover::after { opacity: 1; }
+
+.btn-primary {
+    background: var(--gradient-accent);
+    color: white;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary-400);
+    background: var(--bg-hover);
+    transform: translateY(-2px);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+}
+
+.btn-ghost:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+
+.btn-danger {
+    background: var(--error-500);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--error-600);
+    transform: translateY(-2px);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.05rem;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ============================================================
+   STATS BAR
+   ============================================================ */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+    max-width: 1280px;
+    margin: 0 auto var(--space-3xl);
+    padding: 0 var(--space-xl);
+}
+
+.stat-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    text-align: center;
+    transition: var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: &#x27;&#x27;;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-500);
+    box-shadow: var(--shadow-glow);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+
+.stat-value {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: var(--space-xs);
+}
+
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-xl);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.section-title .icon {
+    margin-right: var(--space-sm);
+}
+
+/* Filter pills */
+.filter-pills {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+}
+
+.filter-pill {
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-glass);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-family: var(--font-sans);
+}
+
+.filter-pill:hover {
+    border-color: var(--primary-400);
+    color: var(--text-primary);
+}
+
+.filter-pill.active {
+    background: var(--primary-500);
+    color: white;
+    border-color: var(--primary-500);
+}
+
+
+/* ============================================================
+   EVENT CARDS GRID
+   ============================================================ */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--space-lg);
+}
+
+.event-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: var(--transition-base);
+    position: relative;
+    animation: fadeInUp 0.5s ease both;
+}
+
+.event-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(124, 58, 237, 0.3);
+    box-shadow: var(--shadow-card), var(--shadow-glow);
+}
+
+.event-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: var(--transition-slow);
+}
+
+.event-card:hover .event-card-image {
+    transform: scale(1.05);
+}
+
+.event-card-image-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.event-card-category {
+    position: absolute;
+    top: var(--space-md);
+    left: var(--space-md);
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-full);
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(10px);
+    color: var(--primary-300);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.event-card-seats-badge {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+.seats-available {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success-500);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.seats-limited {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warning-500);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.seats-full {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--error-500);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.event-card-body {
+    padding: var(--space-lg);
+}
+
+.event-card-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    color: var(--text-primary);
+}
+
+.event-card-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.event-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+.meta-item .icon {
+    font-size: 1rem;
+    color: var(--primary-400);
+}
+
+/* Seats progress bar */
+.seats-progress {
+    margin-bottom: var(--space-md);
+}
+
+.seats-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: var(--space-xs);
+}
+
+.seats-info .seats-count {
+    color: var(--text-secondary);
+}
+
+.seats-info .seats-left {
+    font-weight: 600;
+}
+
+.progress-bar {
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--gradient-accent);
+}
+
+.progress-fill.high { background: var(--error-500); }
+.progress-fill.medium { background: var(--warning-500); }
+
+.event-card-footer {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.event-card-footer .btn {
+    flex: 1;
+}
+
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-base);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px) scale(0.95);
+    transition: var(--transition-spring);
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0) scale(1);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.modal-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-glass);
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: var(--error-500);
+    color: white;
+    border-color: var(--error-500);
+}
+
+.modal-body {
+    padding: var(--space-xl);
+}
+
+.modal-footer {
+    padding: var(--space-md) var(--space-xl) var(--space-xl);
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+}
+
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+.form-group {
+    margin-bottom: var(--space-lg);
+}
+
+.form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+    letter-spacing: 0.02em;
+}
+
+.form-label .required {
+    color: var(--error-500);
+    margin-left: 2px;
+}
+
+.form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+    outline: none;
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+    color: var(--text-tertiary);
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--primary-400);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-select {
+    appearance: none;
+    background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;12&#x27; height=&#x27;12&#x27; viewBox=&#x27;0 0 24 24&#x27; fill=&#x27;none&#x27; stroke=&#x27;%23a1a1b5&#x27; stroke-width=&#x27;2&#x27;%3E%3Cpolyline points=&#x27;6 9 12 15 18 9&#x27;%3E%3C/polyline%3E%3C/svg%3E&quot;);
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+.form-error {
+    font-size: 0.8rem;
+    color: var(--error-500);
+    margin-top: var(--space-xs);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+/* Search box */
+.search-box {
+    position: relative;
+    max-width: 400px;
+}
+
+.search-box .form-input {
+    padding-left: 2.5rem;
+}
+
+.search-box .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-tertiary);
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   REGISTRATIONS TABLE
+   ============================================================ */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-glass);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    background: var(--bg-tertiary);
+    padding: var(--space-md) var(--space-lg);
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.data-table td {
+    padding: var(--space-md) var(--space-lg);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tr:hover td {
+    background: var(--bg-hover);
+}
+
+.data-table .email-cell {
+    color: var(--accent-400);
+}
+
+
+/* ============================================================
+   TOASTS / NOTIFICATIONS
+   ============================================================ */
+.toast-container {
+    position: fixed;
+    top: 80px;
+    right: var(--space-xl);
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.toast {
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    min-width: 300px;
+    max-width: 450px;
+    animation: slideInRight 0.4s ease, fadeOut 0.4s ease 3.6s forwards;
+    backdrop-filter: blur(10px);
+}
+
+.toast.success {
+    border-left: 4px solid var(--success-500);
+}
+
+.toast.error {
+    border-left: 4px solid var(--error-500);
+}
+
+.toast.info {
+    border-left: 4px solid var(--accent-500);
+}
+
+.toast-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(50%); }
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+    text-align: center;
+    padding: var(--space-3xl) var(--space-xl);
+    color: var(--text-tertiary);
+}
+
+.empty-state .empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.empty-state p {
+    font-size: 0.9rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   LOADING SPINNER
+   ============================================================ */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-3xl);
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--bg-tertiary);
+    border-top-color: var(--primary-500);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* ============================================================
+   PAGES (Tab-based navigation)
+   ============================================================ */
+.page {
+    display: none;
+    animation: fadeInUp 0.4s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ============================================================
+   ADMIN PAGE
+   ============================================================ */
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.admin-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.admin-event-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-fast);
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.admin-event-row:hover {
+    border-color: var(--primary-500);
+}
+
+.admin-event-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.admin-event-info h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.admin-event-info .meta {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+.admin-event-stats {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: center;
+}
+
+.admin-event-stat {
+    text-align: center;
+}
+
+.admin-event-stat .value {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-300);
+}
+
+.admin-event-stat .label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+}
+
+.admin-event-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+
+/* ============================================================
+   PARTICIPANTS PAGE
+   ============================================================ */
+.participant-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-md);
+}
+
+.participant-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    transition: var(--transition-fast);
+}
+
+.participant-card:hover {
+    border-color: var(--primary-500);
+    transform: translateY(-2px);
+}
+
+.participant-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.participant-info h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.participant-info p {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+}
+
+.participant-info .email {
+    color: var(--accent-400);
+}
+
+
+/* ============================================================
+   DB CONNECTION STATUS INDICATOR
+   ============================================================ */
+.db-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.db-status.connected {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-500);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.db-status.disconnected {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-500);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.db-status .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.db-status.connected .dot {
+    background: var(--success-500);
+}
+
+.db-status.disconnected .dot {
+    background: var(--error-500);
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-xl);
+    border-top: 1px solid var(--border-glass);
+    margin-top: var(--space-3xl);
+    color: var(--text-tertiary);
+    font-size: 0.85rem;
+}
+
+.footer a {
+    color: var(--primary-400);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-800);
+}
+
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+@media (max-width: 768px) {
+    .navbar-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-glass);
+        flex-direction: column;
+        padding: var(--space-md);
+    }
+
+    .navbar-nav.open {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .events-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-event-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-bar {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .participant-cards {
+        grid-template-columns: 1fr;
+    }
+}
+</pre>
+
+    <div class="page-break"></div>
+    <h2>3.6 Frontend Application Logic (frontend/js/app.js)</h2>
+    <pre class="code-block">/**
+ * ============================================================
+ *  EVENTIFY - Frontend JavaScript Application
+ * ============================================================
+ * 
+ *  This file handles ALL frontend-to-backend communication.
+ *  Every function that talks to the database goes through:
+ * 
+ *    Frontend (fetch API)  →  Backend (Django REST API)  →  MySQL Database
+ *    
+ *  Key Concepts Demonstrated:
+ *    - fetch() API for HTTP requests (GET, POST, PUT, DELETE)
+ *    - Async/Await for handling asynchronous operations
+ *    - JSON data exchange between frontend and backend
+ *    - Dynamic DOM manipulation based on database responses
+ *    - Error handling for network/server errors
+ * ============================================================
+ */
+
+// ============================================================
+// CONFIGURATION
+// ============================================================
+const API_BASE_URL = &#x27;http://localhost:8000/api&#x27;;
+
+// Category emoji mapping
+const CATEGORY_ICONS = {
+    hackathon: &#x27;🏆&#x27;,
+    workshop: &#x27;🔧&#x27;,
+    seminar: &#x27;🎤&#x27;,
+    webinar: &#x27;💻&#x27;,
+    conference: &#x27;🌐&#x27;,
+    meetup: &#x27;🤝&#x27;,
+    competition: &#x27;⚡&#x27;,
+};
+
+// Store all events for client-side filtering
+let allEvents = [];
+let currentFilter = &#x27;all&#x27;;
+
+
+// ============================================================
+// API HELPER — Central function for all HTTP requests
+// ============================================================
+/**
+ * Makes an HTTP request to the Django backend.
+ * This is the CORE function that connects frontend to backend.
+ * 
+ * @param {string} endpoint - API endpoint (e.g., &#x27;/events/&#x27;)
+ * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
+ * @param {object} body - Request body for POST/PUT requests
+ * @returns {object} - JSON response from the backend
+ */
+async function apiRequest(endpoint, method = &#x27;GET&#x27;, body = null) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    
+    const options = {
+        method: method,
+        headers: {
+            &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+        },
+    };
+
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+
+    console.log(`📡 [API ${method}] ${url}`, body || &#x27;&#x27;);
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        
+        console.log(`✅ [Response]`, data);
+
+        if (!response.ok) {
+            throw { status: response.status, data: data };
+        }
+
+        return data;
+    } catch (error) {
+        if (error.data) throw error;
+        console.error(`❌ [API Error]`, error);
+        throw { status: 0, data: { message: &#x27;Cannot connect to backend. Is the Django server running?&#x27; } };
+    }
+}
+
+
+// ============================================================
+// DATABASE CONNECTION STATUS
+// ============================================================
+/**
+ * Check if the backend (and therefore MySQL) is reachable.
+ * Calls the dashboard endpoint as a health check.
+ */
+async function checkDatabaseConnection() {
+    const statusEl = document.getElementById(&#x27;dbStatus&#x27;);
+    const statusText = document.getElementById(&#x27;dbStatusText&#x27;);
+
+    try {
+        await apiRequest(&#x27;/dashboard/&#x27;);
+        statusEl.className = &#x27;db-status connected&#x27;;
+        statusText.textContent = &#x27;MySQL Connected&#x27;;
+    } catch (error) {
+        statusEl.className = &#x27;db-status disconnected&#x27;;
+        statusText.textContent = &#x27;DB Disconnected&#x27;;
+    }
+}
+
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function navigateTo(page) {
+    // Hide all pages
+    document.querySelectorAll(&#x27;.page&#x27;).forEach(p =&gt; p.classList.remove(&#x27;active&#x27;));
+    
+    // Show target page
+    const targetPage = document.getElementById(`page-${page}`);
+    if (targetPage) {
+        targetPage.classList.add(&#x27;active&#x27;);
+    }
+
+    // Update nav links
+    document.querySelectorAll(&#x27;.nav-link&#x27;).forEach(link =&gt; {
+        link.classList.toggle(&#x27;active&#x27;, link.dataset.page === page);
+    });
+
+    // Close mobile nav
+    document.getElementById(&#x27;navbarNav&#x27;).classList.remove(&#x27;open&#x27;);
+
+    // Load data for the page
+    switch (page) {
+        case &#x27;home&#x27;:
+            loadDashboardStats();
+            loadFeaturedEvents();
+            break;
+        case &#x27;events&#x27;:
+            loadAllEvents();
+            break;
+        case &#x27;registrations&#x27;:
+            loadEventSelector();
+            break;
+        case &#x27;participants&#x27;:
+            loadParticipants();
+            break;
+        case &#x27;admin&#x27;:
+            loadAdminEvents();
+            break;
+    }
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: &#x27;smooth&#x27; });
+}
+
+function toggleMobileNav() {
+    document.getElementById(&#x27;navbarNav&#x27;).classList.toggle(&#x27;open&#x27;);
+}
+
+
+// ============================================================
+// DASHBOARD STATS (Aggregate Queries: COUNT, SUM)
+// ============================================================
+/**
+ * Load dashboard statistics from the backend.
+ * 
+ * Backend SQL:
+ *   SELECT COUNT(*) FROM events;
+ *   SELECT COUNT(*) FROM participants;
+ *   SELECT COUNT(*) FROM registrations;
+ *   SELECT SUM(max_seats) FROM events;
+ */
+async function loadDashboardStats() {
+    try {
+        const response = await apiRequest(&#x27;/dashboard/&#x27;);
+        const stats = response.data;
+
+        // Animate counter
+        animateCounter(&#x27;statEvents&#x27;, stats.total_events);
+        animateCounter(&#x27;statParticipants&#x27;, stats.total_participants);
+        animateCounter(&#x27;statRegistrations&#x27;, stats.total_registrations);
+        animateCounter(&#x27;statSeats&#x27;, stats.total_seats);
+    } catch (error) {
+        console.error(&#x27;Failed to load stats:&#x27;, error);
+    }
+}
+
+function animateCounter(elementId, target) {
+    const el = document.getElementById(elementId);
+    const duration = 1200;
+    const start = parseInt(el.textContent) || 0;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (target - start) * eased);
+        
+        el.textContent = current.toLocaleString();
+
+        if (progress &lt; 1) {
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
+}
+
+
+// ============================================================
+// LOAD EVENTS (SELECT Query)
+// ============================================================
+/**
+ * Load featured events (first 4) for the home page.
+ * 
+ * Backend SQL: SELECT * FROM events WHERE is_active = 1 ORDER BY event_date LIMIT 4;
+ */
+async function loadFeaturedEvents() {
+    const grid = document.getElementById(&#x27;featuredEventsGrid&#x27;);
+
+    try {
+        const response = await apiRequest(&#x27;/events/&#x27;);
+        allEvents = response.data;
+
+        const featured = allEvents.slice(0, 4);
+        grid.innerHTML = featured.map(event =&gt; createEventCard(event)).join(&#x27;&#x27;);
+    } catch (error) {
+        grid.innerHTML = `
+            &lt;div class=&quot;empty-state&quot; style=&quot;grid-column: 1/-1;&quot;&gt;
+                &lt;div class=&quot;empty-icon&quot;&gt;⚠️&lt;/div&gt;
+                &lt;h3&gt;Cannot Connect to Backend&lt;/h3&gt;
+                &lt;p&gt;Make sure the Django server is running at ${API_BASE_URL}&lt;/p&gt;
+                &lt;p style=&quot;margin-top: var(--space-md); color: var(--text-tertiary); font-size: 0.8rem;&quot;&gt;
+                    Run: &lt;code style=&quot;color: var(--accent-400);&quot;&gt;python manage.py runserver&lt;/code&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+        `;
+    }
+}
+
+/**
+ * Load all events with optional category filtering.
+ * 
+ * Backend SQL: SELECT * FROM events WHERE is_active = 1 AND category = &#x27;...&#x27; ORDER BY event_date;
+ */
+async function loadAllEvents() {
+    const grid = document.getElementById(&#x27;allEventsGrid&#x27;);
+    grid.innerHTML = &#x27;&lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;
+
+    try {
+        let endpoint = &#x27;/events/&#x27;;
+        if (currentFilter !== &#x27;all&#x27;) {
+            endpoint += `?category=${currentFilter}`;
+        }
+
+        const response = await apiRequest(endpoint);
+        allEvents = response.data;
+
+        if (allEvents.length === 0) {
+            grid.innerHTML = `
+                &lt;div class=&quot;empty-state&quot; style=&quot;grid-column: 1/-1;&quot;&gt;
+                    &lt;div class=&quot;empty-icon&quot;&gt;📅&lt;/div&gt;
+                    &lt;h3&gt;No Events Found&lt;/h3&gt;
+                    &lt;p&gt;No events match the current filter. Try a different category.&lt;/p&gt;
+                &lt;/div&gt;
+            `;
+            return;
+        }
+
+        grid.innerHTML = allEvents.map((event, i) =&gt; 
+            createEventCard(event, i * 0.05)
+        ).join(&#x27;&#x27;);
+    } catch (error) {
+        grid.innerHTML = `
+            &lt;div class=&quot;empty-state&quot; style=&quot;grid-column: 1/-1;&quot;&gt;
+                &lt;div class=&quot;empty-icon&quot;&gt;⚠️&lt;/div&gt;
+                &lt;h3&gt;Cannot Load Events&lt;/h3&gt;
+                &lt;p&gt;Backend server might be down. Please try again.&lt;/p&gt;
+            &lt;/div&gt;
+        `;
+    }
+}
+
+
+// ============================================================
+// EVENT CARD COMPONENT
+// ============================================================
+function createEventCard(event, delay = 0) {
+    const date = new Date(event.event_date);
+    const formattedDate = date.toLocaleDateString(&#x27;en-IN&#x27;, {
+        weekday: &#x27;short&#x27;,
+        year: &#x27;numeric&#x27;,
+        month: &#x27;short&#x27;,
+        day: &#x27;numeric&#x27;,
+    });
+    const formattedTime = date.toLocaleTimeString(&#x27;en-IN&#x27;, {
+        hour: &#x27;2-digit&#x27;,
+        minute: &#x27;2-digit&#x27;,
+    });
+
+    const percentFilled = ((event.registered_count / event.max_seats) * 100).toFixed(0);
+    let seatsClass = &#x27;seats-available&#x27;;
+    let progressClass = &#x27;&#x27;;
+    if (event.is_full) {
+        seatsClass = &#x27;seats-full&#x27;;
+        progressClass = &#x27;high&#x27;;
+    } else if (event.seats_left &lt;= event.max_seats * 0.2) {
+        seatsClass = &#x27;seats-limited&#x27;;
+        progressClass = &#x27;medium&#x27;;
+    }
+
+    const categoryIcon = CATEGORY_ICONS[event.category] || &#x27;📅&#x27;;
+    const imageUrl = event.image_url || `https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800`;
+
+    return `
+        &lt;div class=&quot;event-card&quot; style=&quot;animation-delay: ${delay}s;&quot;&gt;
+            &lt;div class=&quot;event-card-image-wrapper&quot;&gt;
+                &lt;img 
+                    src=&quot;${imageUrl}&quot; 
+                    alt=&quot;${event.name}&quot; 
+                    class=&quot;event-card-image&quot;
+                    onerror=&quot;this.src=&#x27;https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&#x27;&quot;
+                    loading=&quot;lazy&quot;
+                &gt;
+                &lt;span class=&quot;event-card-category&quot;&gt;${categoryIcon} ${event.category}&lt;/span&gt;
+                &lt;span class=&quot;event-card-seats-badge ${seatsClass}&quot;&gt;
+                    ${event.is_full ? &#x27;🚫 Full&#x27; : `${event.seats_left} seats left`}
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;event-card-body&quot;&gt;
+                &lt;h3 class=&quot;event-card-title&quot;&gt;${event.name}&lt;/h3&gt;
+                &lt;p class=&quot;event-card-desc&quot;&gt;${event.description}&lt;/p&gt;
+                &lt;div class=&quot;event-card-meta&quot;&gt;
+                    &lt;div class=&quot;meta-item&quot;&gt;
+                        &lt;span class=&quot;icon&quot;&gt;📅&lt;/span&gt;
+                        ${formattedDate} at ${formattedTime}
+                    &lt;/div&gt;
+                    &lt;div class=&quot;meta-item&quot;&gt;
+                        &lt;span class=&quot;icon&quot;&gt;📍&lt;/span&gt;
+                        ${event.venue}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;seats-progress&quot;&gt;
+                    &lt;div class=&quot;seats-info&quot;&gt;
+                        &lt;span class=&quot;seats-count&quot;&gt;${event.registered_count} / ${event.max_seats} registered&lt;/span&gt;
+                        &lt;span class=&quot;seats-left&quot; style=&quot;color: ${event.is_full ? &#x27;var(--error-500)&#x27; : &#x27;var(--success-500)&#x27;}&quot;&gt;
+                            ${event.is_full ? &#x27;Full&#x27; : `${event.seats_left} left`}
+                        &lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;progress-bar&quot;&gt;
+                        &lt;div class=&quot;progress-fill ${progressClass}&quot; style=&quot;width: ${Math.min(percentFilled, 100)}%&quot;&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;event-card-footer&quot;&gt;
+                    &lt;button class=&quot;btn btn-primary btn-sm&quot; onclick=&quot;openRegisterModal(${event.id}, &#x27;${event.name.replace(/&#x27;/g, &quot;\\&#x27;&quot;)}&#x27;)&quot; ${event.is_full ? &#x27;disabled style=&quot;opacity:0.5;cursor:not-allowed;&quot;&#x27; : &#x27;&#x27;}&gt;
+                        ${event.is_full ? &#x27;🚫 Full&#x27; : &#x27;✅ Register&#x27;}
+                    &lt;/button&gt;
+                    &lt;button class=&quot;btn btn-outline btn-sm&quot; onclick=&quot;viewEventDetails(${event.id})&quot;&gt;
+                        👁️ Details
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `;
+}
+
+
+// ============================================================
+// SEARCH EVENTS (WHERE + LIKE Query)
+// ============================================================
+let searchTimeout;
+
+/**
+ * Search events by name/description/venue.
+ * 
+ * Backend SQL: SELECT * FROM events WHERE name LIKE &#x27;%query%&#x27; OR description LIKE &#x27;%query%&#x27;;
+ */
+function handleSearch() {
+    clearTimeout(searchTimeout);
+    const query = document.getElementById(&#x27;searchInput&#x27;).value.trim();
+
+    searchTimeout = setTimeout(async () =&gt; {
+        if (!query) {
+            loadAllEvents();
+            return;
+        }
+
+        const grid = document.getElementById(&#x27;allEventsGrid&#x27;);
+        grid.innerHTML = &#x27;&lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;
+
+        try {
+            const response = await apiRequest(`/events/search/?q=${encodeURIComponent(query)}`);
+            const events = response.data;
+
+            if (events.length === 0) {
+                grid.innerHTML = `
+                    &lt;div class=&quot;empty-state&quot; style=&quot;grid-column: 1/-1;&quot;&gt;
+                        &lt;div class=&quot;empty-icon&quot;&gt;🔍&lt;/div&gt;
+                        &lt;h3&gt;No Results&lt;/h3&gt;
+                        &lt;p&gt;No events found for &quot;${query}&quot;. Try a different search term.&lt;/p&gt;
+                    &lt;/div&gt;
+                `;
+                return;
+            }
+
+            grid.innerHTML = events.map((event, i) =&gt; createEventCard(event, i * 0.05)).join(&#x27;&#x27;);
+        } catch (error) {
+            grid.innerHTML = `
+                &lt;div class=&quot;empty-state&quot; style=&quot;grid-column: 1/-1;&quot;&gt;
+                    &lt;div class=&quot;empty-icon&quot;&gt;⚠️&lt;/div&gt;
+                    &lt;h3&gt;Search Failed&lt;/h3&gt;
+                    &lt;p&gt;Could not perform search. Please try again.&lt;/p&gt;
+                &lt;/div&gt;
+            `;
+        }
+    }, 300);
+}
+
+
+// ============================================================
+// FILTER BY CATEGORY
+// ============================================================
+function filterByCategory(category, buttonEl) {
+    currentFilter = category;
+    
+    // Update pill states
+    document.querySelectorAll(&#x27;.filter-pill&#x27;).forEach(pill =&gt; pill.classList.remove(&#x27;active&#x27;));
+    buttonEl.classList.add(&#x27;active&#x27;);
+
+    loadAllEvents();
+}
+
+
+// ============================================================
+// REGISTRATION (INSERT with Foreign Keys)
+// ============================================================
+/**
+ * Open registration modal for a specific event.
+ */
+function openRegisterModal(eventId, eventName) {
+    document.getElementById(&#x27;registerEventId&#x27;).value = eventId;
+    document.getElementById(&#x27;registerEventName&#x27;).textContent = eventName;
+    document.getElementById(&#x27;registerForm&#x27;).reset();
+    document.getElementById(&#x27;registerEventId&#x27;).value = eventId;
+    openModal(&#x27;registerModal&#x27;);
+}
+
+/**
+ * Handle registration form submission.
+ * 
+ * Frontend sends JSON via POST → Backend executes:
+ *   1. SELECT/INSERT INTO participants (get_or_create)
+ *   2. INSERT INTO registrations (event_id, participant_id)
+ */
+async function handleRegistration(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById(&#x27;registerSubmitBtn&#x27;);
+    submitBtn.disabled = true;
+    submitBtn.textContent = &#x27;⏳ Registering...&#x27;;
+
+    const data = {
+        event_id: parseInt(document.getElementById(&#x27;registerEventId&#x27;).value),
+        name: document.getElementById(&#x27;regName&#x27;).value,
+        email: document.getElementById(&#x27;regEmail&#x27;).value,
+        phone: document.getElementById(&#x27;regPhone&#x27;).value,
+        college: document.getElementById(&#x27;regCollege&#x27;).value,
+    };
+
+    try {
+        const response = await apiRequest(&#x27;/register/&#x27;, &#x27;POST&#x27;, data);
+        
+        closeModal(&#x27;registerModal&#x27;);
+        showToast(&#x27;success&#x27;, response.message || &#x27;Registration successful!&#x27;);
+        
+        // Refresh data to show updated seat counts
+        loadDashboardStats();
+        loadFeaturedEvents();
+        loadAllEvents();
+    } catch (error) {
+        const errorMsg = error.data?.errors?.event_id?.[0] 
+            || error.data?.errors?.detail?.[0] 
+            || error.data?.message 
+            || &#x27;Registration failed. Please try again.&#x27;;
+        showToast(&#x27;error&#x27;, errorMsg);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = &#x27;✅ Register Now&#x27;;
+    }
+}
+
+
+// ============================================================
+// VIEW EVENT DETAILS
+// ============================================================
+async function viewEventDetails(eventId) {
+    try {
+        const response = await apiRequest(`/events/${eventId}/`);
+        const event = response.data;
+
+        const date = new Date(event.event_date);
+        const formattedDate = date.toLocaleDateString(&#x27;en-IN&#x27;, {
+            weekday: &#x27;long&#x27;,
+            year: &#x27;numeric&#x27;,
+            month: &#x27;long&#x27;,
+            day: &#x27;numeric&#x27;,
+        });
+
+        const categoryIcon = CATEGORY_ICONS[event.category] || &#x27;📅&#x27;;
+
+        // Show details in a modal-like alert (simple approach)
+        const detailHTML = `
+            &lt;div style=&quot;text-align: left;&quot;&gt;
+                &lt;h2 style=&quot;font-family: var(--font-display); margin-bottom: var(--space-md);&quot;&gt;${event.name}&lt;/h2&gt;
+                &lt;p style=&quot;color: var(--text-secondary); margin-bottom: var(--space-lg); line-height: 1.6;&quot;&gt;${event.description}&lt;/p&gt;
+                &lt;div style=&quot;display: grid; gap: var(--space-md);&quot;&gt;
+                    &lt;div class=&quot;meta-item&quot;&gt;&lt;span class=&quot;icon&quot;&gt;${categoryIcon}&lt;/span&gt; ${event.category.charAt(0).toUpperCase() + event.category.slice(1)}&lt;/div&gt;
+                    &lt;div class=&quot;meta-item&quot;&gt;&lt;span class=&quot;icon&quot;&gt;📅&lt;/span&gt; ${formattedDate}&lt;/div&gt;
+                    &lt;div class=&quot;meta-item&quot;&gt;&lt;span class=&quot;icon&quot;&gt;📍&lt;/span&gt; ${event.venue}&lt;/div&gt;
+                    &lt;div class=&quot;meta-item&quot;&gt;&lt;span class=&quot;icon&quot;&gt;💺&lt;/span&gt; ${event.seats_left} / ${event.max_seats} seats available&lt;/div&gt;
+                    &lt;div class=&quot;meta-item&quot;&gt;&lt;span class=&quot;icon&quot;&gt;✅&lt;/span&gt; ${event.registered_count} registrations&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `;
+
+        // Reuse registerModal structure for detail view
+        document.getElementById(&#x27;registerModal&#x27;).querySelector(&#x27;.modal-title&#x27;).textContent = &#x27;📅 Event Details&#x27;;
+        document.getElementById(&#x27;registerModal&#x27;).querySelector(&#x27;.modal-body&#x27;).innerHTML = detailHTML + `
+            &lt;div style=&quot;margin-top: var(--space-xl); display: flex; gap: var(--space-sm); justify-content: flex-end;&quot;&gt;
+                &lt;button class=&quot;btn btn-outline&quot; onclick=&quot;closeModal(&#x27;registerModal&#x27;)&quot;&gt;Close&lt;/button&gt;
+                ${!event.is_full ? `&lt;button class=&quot;btn btn-primary&quot; onclick=&quot;closeModal(&#x27;registerModal&#x27;); openRegisterModal(${event.id}, &#x27;${event.name.replace(/&#x27;/g, &quot;\\&#x27;&quot;)}&#x27;)&quot;&gt;✅ Register&lt;/button&gt;` : &#x27;&#x27;}
+            &lt;/div&gt;
+        `;
+        openModal(&#x27;registerModal&#x27;);
+    } catch (error) {
+        showToast(&#x27;error&#x27;, &#x27;Could not load event details.&#x27;);
+    }
+}
+
+
+// ============================================================
+// REGISTRATIONS LIST (JOIN Query)
+// ============================================================
+/**
+ * Load event selector for registrations page.
+ */
+async function loadEventSelector() {
+    const container = document.getElementById(&#x27;eventSelectorCards&#x27;);
+
+    try {
+        const response = await apiRequest(&#x27;/events/&#x27;);
+        const events = response.data;
+
+        container.innerHTML = events.map(event =&gt; `
+            &lt;div class=&quot;participant-card&quot; style=&quot;cursor:pointer;&quot; onclick=&quot;loadRegistrationsForEvent(${event.id}, &#x27;${event.name.replace(/&#x27;/g, &quot;\\&#x27;&quot;)}&#x27;)&quot;&gt;
+                &lt;div class=&quot;participant-avatar&quot;&gt;${CATEGORY_ICONS[event.category] || &#x27;📅&#x27;}&lt;/div&gt;
+                &lt;div class=&quot;participant-info&quot;&gt;
+                    &lt;h4&gt;${event.name}&lt;/h4&gt;
+                    &lt;p&gt;${event.registered_count} registrations • ${event.seats_left} seats left&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `).join(&#x27;&#x27;);
+    } catch (error) {
+        container.innerHTML = `
+            &lt;div class=&quot;empty-state&quot; style=&quot;grid-column: 1/-1;&quot;&gt;
+                &lt;div class=&quot;empty-icon&quot;&gt;⚠️&lt;/div&gt;
+                &lt;h3&gt;Cannot Load Events&lt;/h3&gt;
+                &lt;p&gt;Please check if the backend is running.&lt;/p&gt;
+            &lt;/div&gt;
+        `;
+    }
+}
+
+/**
+ * Load registrations for a specific event.
+ * 
+ * Backend SQL:
+ *   SELECT r.*, p.name, p.email 
+ *   FROM registrations r
+ *   JOIN participants p ON r.participant_id = p.id
+ *   WHERE r.event_id = ?;
+ */
+async function loadRegistrationsForEvent(eventId, eventName) {
+    const container = document.getElementById(&#x27;registrationsContent&#x27;);
+    container.innerHTML = &#x27;&lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;
+
+    try {
+        const response = await apiRequest(`/events/${eventId}/registrations/`);
+        const registrations = response.data;
+
+        if (registrations.length === 0) {
+            container.innerHTML = `
+                &lt;div class=&quot;empty-state&quot;&gt;
+                    &lt;div class=&quot;empty-icon&quot;&gt;📋&lt;/div&gt;
+                    &lt;h3&gt;No Registrations Yet&lt;/h3&gt;
+                    &lt;p&gt;No one has registered for &quot;${eventName}&quot; yet.&lt;/p&gt;
+                &lt;/div&gt;
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            &lt;div style=&quot;margin-bottom: var(--space-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);&quot;&gt;
+                &lt;div&gt;
+                    &lt;h3 style=&quot;font-family: var(--font-display); font-size: 1.1rem;&quot;&gt;${eventName}&lt;/h3&gt;
+                    &lt;p style=&quot;color: var(--text-tertiary); font-size: 0.85rem;&quot;&gt;${response.total_registrations} registered • ${response.seats_left} seats left&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;span class=&quot;db-status connected&quot;&gt;
+                    &lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;
+                    SELECT ... FROM registrations JOIN participants
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;table-wrapper&quot;&gt;
+                &lt;table class=&quot;data-table&quot;&gt;
+                    &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;th&gt;#&lt;/th&gt;
+                            &lt;th&gt;Name&lt;/th&gt;
+                            &lt;th&gt;Email&lt;/th&gt;
+                            &lt;th&gt;Registered At&lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody&gt;
+                        ${registrations.map((reg, i) =&gt; `
+                            &lt;tr&gt;
+                                &lt;td&gt;${i + 1}&lt;/td&gt;
+                                &lt;td&gt;&lt;strong&gt;${reg.participant_name}&lt;/strong&gt;&lt;/td&gt;
+                                &lt;td class=&quot;email-cell&quot;&gt;${reg.participant_email}&lt;/td&gt;
+                                &lt;td&gt;${new Date(reg.registered_at).toLocaleString(&#x27;en-IN&#x27;)}&lt;/td&gt;
+                            &lt;/tr&gt;
+                        `).join(&#x27;&#x27;)}
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        `;
+    } catch (error) {
+        container.innerHTML = `
+            &lt;div class=&quot;empty-state&quot;&gt;
+                &lt;div class=&quot;empty-icon&quot;&gt;⚠️&lt;/div&gt;
+                &lt;h3&gt;Failed to Load&lt;/h3&gt;
+                &lt;p&gt;Could not load registrations. Please try again.&lt;/p&gt;
+            &lt;/div&gt;
+        `;
+    }
+}
+
+
+// ============================================================
+// PARTICIPANTS (SELECT * FROM participants)
+// ============================================================
+/**
+ * Load all participants from the database.
+ * 
+ * Backend SQL: SELECT * FROM participants ORDER BY name;
+ */
+async function loadParticipants() {
+    const container = document.getElementById(&#x27;participantsContent&#x27;);
+    container.innerHTML = &#x27;&lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;
+
+    try {
+        const response = await apiRequest(&#x27;/participants/&#x27;);
+        const participants = response.data;
+
+        if (participants.length === 0) {
+            container.innerHTML = `
+                &lt;div class=&quot;empty-state&quot;&gt;
+                    &lt;div class=&quot;empty-icon&quot;&gt;👥&lt;/div&gt;
+                    &lt;h3&gt;No Participants Yet&lt;/h3&gt;
+                    &lt;p&gt;Participants will appear here after registering for events.&lt;/p&gt;
+                &lt;/div&gt;
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            &lt;div class=&quot;participant-cards&quot;&gt;
+                ${participants.map(p =&gt; {
+                    const initials = p.name.split(&#x27; &#x27;).map(n =&gt; n[0]).join(&#x27;&#x27;).substring(0, 2).toUpperCase();
+                    return `
+                        &lt;div class=&quot;participant-card&quot;&gt;
+                            &lt;div class=&quot;participant-avatar&quot;&gt;${initials}&lt;/div&gt;
+                            &lt;div class=&quot;participant-info&quot;&gt;
+                                &lt;h4&gt;${p.name}&lt;/h4&gt;
+                                &lt;p class=&quot;email&quot;&gt;${p.email}&lt;/p&gt;
+                                &lt;p&gt;${p.college || &#x27;No college specified&#x27;}&lt;/p&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    `;
+                }).join(&#x27;&#x27;)}
+            &lt;/div&gt;
+        `;
+    } catch (error) {
+        container.innerHTML = `
+            &lt;div class=&quot;empty-state&quot;&gt;
+                &lt;div class=&quot;empty-icon&quot;&gt;⚠️&lt;/div&gt;
+                &lt;h3&gt;Cannot Load Participants&lt;/h3&gt;
+                &lt;p&gt;Please check backend connectivity.&lt;/p&gt;
+            &lt;/div&gt;
+        `;
+    }
+}
+
+
+// ============================================================
+// ADMIN PANEL (Full CRUD)
+// ============================================================
+/**
+ * Load all events in admin view with edit/delete actions.
+ */
+async function loadAdminEvents() {
+    const container = document.getElementById(&#x27;adminEventsContent&#x27;);
+    container.innerHTML = &#x27;&lt;div class=&quot;loading-spinner&quot;&gt;&lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;
+
+    try {
+        const response = await apiRequest(&#x27;/events/&#x27;);
+        const events = response.data;
+
+        if (events.length === 0) {
+            container.innerHTML = `
+                &lt;div class=&quot;empty-state&quot;&gt;
+                    &lt;div class=&quot;empty-icon&quot;&gt;📅&lt;/div&gt;
+                    &lt;h3&gt;No Events&lt;/h3&gt;
+                    &lt;p&gt;Click &quot;Create Event&quot; to add your first event.&lt;/p&gt;
+                &lt;/div&gt;
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            &lt;div class=&quot;admin-events-list&quot;&gt;
+                ${events.map(event =&gt; {
+                    const date = new Date(event.event_date);
+                    const formattedDate = date.toLocaleDateString(&#x27;en-IN&#x27;, {
+                        year: &#x27;numeric&#x27;, month: &#x27;short&#x27;, day: &#x27;numeric&#x27;
+                    });
+                    const icon = CATEGORY_ICONS[event.category] || &#x27;📅&#x27;;
+
+                    return `
+                        &lt;div class=&quot;admin-event-row&quot;&gt;
+                            &lt;div class=&quot;admin-event-info&quot;&gt;
+                                &lt;h3&gt;${icon} ${event.name}&lt;/h3&gt;
+                                &lt;div class=&quot;meta&quot;&gt;${formattedDate} • ${event.venue} • ${event.category}&lt;/div&gt;
+                            &lt;/div&gt;
+                            &lt;div class=&quot;admin-event-stats&quot;&gt;
+                                &lt;div class=&quot;admin-event-stat&quot;&gt;
+                                    &lt;div class=&quot;value&quot;&gt;${event.registered_count}&lt;/div&gt;
+                                    &lt;div class=&quot;label&quot;&gt;Registered&lt;/div&gt;
+                                &lt;/div&gt;
+                                &lt;div class=&quot;admin-event-stat&quot;&gt;
+                                    &lt;div class=&quot;value&quot;&gt;${event.seats_left}&lt;/div&gt;
+                                    &lt;div class=&quot;label&quot;&gt;Seats Left&lt;/div&gt;
+                                &lt;/div&gt;
+                                &lt;div class=&quot;admin-event-stat&quot;&gt;
+                                    &lt;div class=&quot;value&quot;&gt;${event.max_seats}&lt;/div&gt;
+                                    &lt;div class=&quot;label&quot;&gt;Total&lt;/div&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                            &lt;div class=&quot;admin-event-actions&quot;&gt;
+                                &lt;button class=&quot;btn btn-outline btn-sm&quot; onclick=&quot;openEditEventModal(${event.id})&quot;&gt;✏️ Edit&lt;/button&gt;
+                                &lt;button class=&quot;btn btn-danger btn-sm&quot; onclick=&quot;deleteEvent(${event.id}, &#x27;${event.name.replace(/&#x27;/g, &quot;\\&#x27;&quot;)}&#x27;)&quot;&gt;🗑️ Delete&lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    `;
+                }).join(&#x27;&#x27;)}
+            &lt;/div&gt;
+        `;
+    } catch (error) {
+        container.innerHTML = `
+            &lt;div class=&quot;empty-state&quot;&gt;
+                &lt;div class=&quot;empty-icon&quot;&gt;⚠️&lt;/div&gt;
+                &lt;h3&gt;Cannot Load Events&lt;/h3&gt;
+                &lt;p&gt;Please check backend connectivity.&lt;/p&gt;
+            &lt;/div&gt;
+        `;
+    }
+}
+
+
+// ============================================================
+// CREATE EVENT (INSERT INTO events)
+// ============================================================
+function openCreateEventModal() {
+    document.getElementById(&#x27;eventModalTitle&#x27;).textContent = &#x27;➕ Create New Event&#x27;;
+    document.getElementById(&#x27;eventSubmitBtn&#x27;).textContent = &#x27;✅ Create Event&#x27;;
+    document.getElementById(&#x27;eventFormId&#x27;).value = &#x27;&#x27;;
+    document.getElementById(&#x27;eventForm&#x27;).reset();
+    openModal(&#x27;eventModal&#x27;);
+}
+
+/**
+ * Handle event form submission (CREATE or UPDATE).
+ * 
+ * CREATE SQL: INSERT INTO events (name, description, ...) VALUES (...);
+ * UPDATE SQL: UPDATE events SET name=..., description=... WHERE id = ?;
+ */
+async function handleEventSubmit(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById(&#x27;eventSubmitBtn&#x27;);
+    submitBtn.disabled = true;
+
+    const eventId = document.getElementById(&#x27;eventFormId&#x27;).value;
+    const isEdit = !!eventId;
+
+    const data = {
+        name: document.getElementById(&#x27;eventName&#x27;).value,
+        description: document.getElementById(&#x27;eventDesc&#x27;).value,
+        event_date: new Date(document.getElementById(&#x27;eventDate&#x27;).value).toISOString(),
+        venue: document.getElementById(&#x27;eventVenue&#x27;).value,
+        max_seats: parseInt(document.getElementById(&#x27;eventMaxSeats&#x27;).value),
+        category: document.getElementById(&#x27;eventCategory&#x27;).value,
+        image_url: document.getElementById(&#x27;eventImageUrl&#x27;).value || null,
+    };
+
+    try {
+        let response;
+        if (isEdit) {
+            response = await apiRequest(`/events/${eventId}/update/`, &#x27;PUT&#x27;, data);
+            showToast(&#x27;success&#x27;, `Event &quot;${data.name}&quot; updated successfully!`);
+        } else {
+            response = await apiRequest(&#x27;/events/create/&#x27;, &#x27;POST&#x27;, data);
+            showToast(&#x27;success&#x27;, `Event &quot;${data.name}&quot; created successfully!`);
+        }
+
+        closeModal(&#x27;eventModal&#x27;);
+        loadAdminEvents();
+        loadDashboardStats();
+    } catch (error) {
+        const errorMsg = error.data?.errors 
+            ? Object.values(error.data.errors).flat().join(&#x27;, &#x27;)
+            : &#x27;Failed to save event.&#x27;;
+        showToast(&#x27;error&#x27;, errorMsg);
+    } finally {
+        submitBtn.disabled = false;
+    }
+}
+
+
+// ============================================================
+// EDIT EVENT (UPDATE query)
+// ============================================================
+/**
+ * Open edit modal pre-filled with event data.
+ * 
+ * Backend SQL: SELECT * FROM events WHERE id = ?;
+ */
+async function openEditEventModal(eventId) {
+    try {
+        const response = await apiRequest(`/events/${eventId}/`);
+        const event = response.data;
+
+        document.getElementById(&#x27;eventModalTitle&#x27;).textContent = &#x27;✏️ Edit Event&#x27;;
+        document.getElementById(&#x27;eventSubmitBtn&#x27;).textContent = &#x27;💾 Save Changes&#x27;;
+        document.getElementById(&#x27;eventFormId&#x27;).value = event.id;
+        document.getElementById(&#x27;eventName&#x27;).value = event.name;
+        document.getElementById(&#x27;eventDesc&#x27;).value = event.description;
+        
+        // Format datetime for the input
+        const date = new Date(event.event_date);
+        const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        document.getElementById(&#x27;eventDate&#x27;).value = localDate.toISOString().slice(0, 16);
+        
+        document.getElementById(&#x27;eventVenue&#x27;).value = event.venue;
+        document.getElementById(&#x27;eventMaxSeats&#x27;).value = event.max_seats;
+        document.getElementById(&#x27;eventCategory&#x27;).value = event.category;
+        document.getElementById(&#x27;eventImageUrl&#x27;).value = event.image_url || &#x27;&#x27;;
+
+        openModal(&#x27;eventModal&#x27;);
+    } catch (error) {
+        showToast(&#x27;error&#x27;, &#x27;Could not load event for editing.&#x27;);
+    }
+}
+
+
+// ============================================================
+// DELETE EVENT (DELETE FROM events WHERE id = ?)
+// ============================================================
+async function deleteEvent(eventId, eventName) {
+    if (!confirm(`⚠️ Are you sure you want to delete &quot;${eventName}&quot;?\n\nThis will also delete all registrations for this event (CASCADE DELETE).`)) {
+        return;
+    }
+
+    try {
+        await apiRequest(`/events/${eventId}/delete/`, &#x27;DELETE&#x27;);
+        showToast(&#x27;success&#x27;, `Event &quot;${eventName}&quot; deleted successfully!`);
+        loadAdminEvents();
+        loadDashboardStats();
+    } catch (error) {
+        showToast(&#x27;error&#x27;, &#x27;Failed to delete event.&#x27;);
+    }
+}
+
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(modalId) {
+    document.getElementById(modalId).classList.add(&#x27;active&#x27;);
+    document.body.style.overflow = &#x27;hidden&#x27;;
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove(&#x27;active&#x27;);
+    document.body.style.overflow = &#x27;&#x27;;
+
+    // Reset register modal to original state if it was used for details
+    if (modalId === &#x27;registerModal&#x27;) {
+        const modal = document.getElementById(&#x27;registerModal&#x27;);
+        modal.querySelector(&#x27;.modal-title&#x27;).textContent = &#x27;📝 Register for Event&#x27;;
+        modal.querySelector(&#x27;.modal-body&#x27;).innerHTML = `
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;p style=&quot;color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--space-md);&quot;&gt;
+                    Registering for: &lt;strong id=&quot;registerEventName&quot; style=&quot;color: var(--primary-300);&quot;&gt;&lt;/strong&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;form id=&quot;registerForm&quot; onsubmit=&quot;handleRegistration(event)&quot;&gt;
+                &lt;input type=&quot;hidden&quot; id=&quot;registerEventId&quot;&gt;
+                &lt;div class=&quot;form-group&quot;&gt;
+                    &lt;label class=&quot;form-label&quot;&gt;Full Name &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                    &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;regName&quot; placeholder=&quot;Enter your full name&quot; required&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;form-row&quot;&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;label class=&quot;form-label&quot;&gt;Email &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type=&quot;email&quot; class=&quot;form-input&quot; id=&quot;regEmail&quot; placeholder=&quot;your@email.com&quot; required&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;form-group&quot;&gt;
+                        &lt;label class=&quot;form-label&quot;&gt;Phone&lt;/label&gt;
+                        &lt;input type=&quot;tel&quot; class=&quot;form-input&quot; id=&quot;regPhone&quot; placeholder=&quot;9876543210&quot;&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;form-group&quot;&gt;
+                    &lt;label class=&quot;form-label&quot;&gt;College / University&lt;/label&gt;
+                    &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;regCollege&quot; placeholder=&quot;Your college name&quot;&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;modal-footer&quot; style=&quot;padding: 0;&quot;&gt;
+                    &lt;button type=&quot;button&quot; class=&quot;btn btn-outline&quot; onclick=&quot;closeModal(&#x27;registerModal&#x27;)&quot;&gt;Cancel&lt;/button&gt;
+                    &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot; id=&quot;registerSubmitBtn&quot;&gt;
+                        ✅ Register Now
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        `;
+    }
+}
+
+// Close modal on overlay click
+document.querySelectorAll(&#x27;.modal-overlay&#x27;).forEach(overlay =&gt; {
+    overlay.addEventListener(&#x27;click&#x27;, (e) =&gt; {
+        if (e.target === overlay) {
+            closeModal(overlay.id);
+        }
+    });
+});
+
+// Close modal on Escape key
+document.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+    if (e.key === &#x27;Escape&#x27;) {
+        document.querySelectorAll(&#x27;.modal-overlay.active&#x27;).forEach(modal =&gt; {
+            closeModal(modal.id);
+        });
+    }
+});
+
+
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+function showToast(type, message) {
+    const container = document.getElementById(&#x27;toastContainer&#x27;);
+    const icons = { success: &#x27;✅&#x27;, error: &#x27;❌&#x27;, info: &#x27;ℹ️&#x27; };
+
+    const toast = document.createElement(&#x27;div&#x27;);
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        &lt;span class=&quot;toast-icon&quot;&gt;${icons[type] || &#x27;ℹ️&#x27;}&lt;/span&gt;
+        &lt;span&gt;${message}&lt;/span&gt;
+    `;
+
+    container.appendChild(toast);
+
+    // Remove after animation
+    setTimeout(() =&gt; {
+        toast.remove();
+    }, 4000);
+}
+
+
+// ============================================================
+// NAVBAR SCROLL EFFECT
+// ============================================================
+window.addEventListener(&#x27;scroll&#x27;, () =&gt; {
+    const navbar = document.getElementById(&#x27;navbar&#x27;);
+    navbar.classList.toggle(&#x27;scrolled&#x27;, window.scrollY &gt; 50);
+});
+
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+document.addEventListener(&#x27;DOMContentLoaded&#x27;, () =&gt; {
+    console.log(&#x27;🎯 Eventify Frontend Loaded&#x27;);
+    console.log(`📡 API Base URL: ${API_BASE_URL}`);
+    
+    // Check database connection
+    checkDatabaseConnection();
+
+    // Load home page data
+    loadDashboardStats();
+    loadFeaturedEvents();
+});
+</pre>
+
+    <!-- 4. CONCLUSION -->
+    <div class="page-break"></div>
+    <h1>4. Conclusion</h1>
+    <p>
+        The <strong>Eventify</strong> project demonstrates complete frontend to backend to relational database connectivity. By using normalized tables (3NF), foreign key constraints, and REST API controllers, the system handles real-time seat tracking, participant management, and event listing efficiently without data redundancy.
+    </p>
+
+</body>
+</html>

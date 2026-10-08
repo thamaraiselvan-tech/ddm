@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Eventify - Premium Full-Stack Event Registration & Management System powered by Django REST Framework and JavaScript.">
+    <title>Eventify — Full-Stack Event Platform</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+</head>
+<body>
+
+    <!-- ============================================================
+         NAVBAR
+         ============================================================ -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="navbar-brand" onclick="navigateTo('home')">
+                <div class="navbar-logo">🎯</div>
+                <div class="navbar-title-wrapper">
+                    <span class="navbar-title">Eventify</span>
+                    <span class="navbar-subtitle">DBMS Platform</span>
+                </div>
+            </a>
+
+            <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Toggle navigation">
+                ☰
+            </button>
+
+            <ul class="navbar-nav" id="navbarNav">
+                <li><button class="nav-link active" data-page="home" onclick="navigateTo('home')">
+                    <span class="nav-link-icon">🏠</span> Home
+                </button></li>
+                <li><button class="nav-link" data-page="events" onclick="navigateTo('events')">
+                    <span class="nav-link-icon">📅</span> Events
+                </button></li>
+                <li><button class="nav-link" data-page="registrations" onclick="navigateTo('registrations')">
+                    <span class="nav-link-icon">📋</span> Registrations
+                </button></li>
+                <li><button class="nav-link" data-page="participants" onclick="navigateTo('participants')">
+                    <span class="nav-link-icon">👥</span> Participants
+                </button></li>
+                <li><button class="nav-link" data-page="admin" onclick="navigateTo('admin')">
+                    <span class="nav-link-icon">⚙️</span> Admin Panel
+                </button></li>
+                <li style="margin-left: 0.5rem;">
+                    <span class="db-status disconnected" id="dbStatus">
+                        <span class="dot"></span>
+                        <span id="dbStatusText">Connecting...</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Notification Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+
+    <!-- ============================================================
+         HOME PAGE
+         ============================================================ -->
+    <div class="page active" id="page-home">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                Full-Stack DBMS Project — Django REST + Database Engine
+            </div>
+            <h1>
+                Discover & Register for<br>
+                <span class="gradient-text">Extraordinary Events</span>
+            </h1>
+            <p class="hero-subtitle">
+                An intelligent Event Registration & Analytics Platform featuring real-time data sync, dynamic category filtering, SQL join queries, and full admin CRUD management.
+            </p>
+            <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" onclick="navigateTo('events')">
+                    <span>📅</span> Browse All Events
+                </button>
+                <button class="btn btn-outline btn-lg" onclick="navigateTo('admin')">
+                    <span>⚙️</span> Admin Console
+                </button>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">📅</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="statEvents">0</div>
+                    <div class="stat-label">Active Events</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">👥</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="statParticipants">0</div>
+                    <div class="stat-label">Participants</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">✅</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="statRegistrations">0</div>
+                    <div class="stat-label">Registrations</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">💺</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="statSeats">0</div>
+                    <div class="stat-label">Total Seats</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Events -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title"><span>🔥</span> Featured Events</h2>
+                <button class="btn btn-ghost" onclick="navigateTo('events')">View All Events →</button>
+            </div>
+            <div class="events-grid" id="featuredEventsGrid">
+                <div class="loading-spinner"><div class="spinner"></div></div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============================================================
+         EVENTS PAGE
+         ============================================================ -->
+    <div class="page" id="page-events">
+        <section class="section" style="padding-top: 6rem;">
+            <div class="section-header">
+                <h2 class="section-title"><span>📅</span> Event Catalog</h2>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="form-input" id="searchInput" placeholder="Search by event, speaker, venue..." oninput="handleSearch()">
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="filter-pills" style="margin-bottom: var(--space-xl);">
+                <button class="filter-pill active" data-category="all" onclick="filterByCategory('all', this)">All Categories</button>
+                <button class="filter-pill" data-category="hackathon" onclick="filterByCategory('hackathon', this)">🏆 Hackathon</button>
+                <button class="filter-pill" data-category="workshop" onclick="filterByCategory('workshop', this)">🔧 Workshop</button>
+                <button class="filter-pill" data-category="seminar" onclick="filterByCategory('seminar', this)">🎤 Seminar</button>
+                <button class="filter-pill" data-category="webinar" onclick="filterByCategory('webinar', this)">💻 Webinar</button>
+                <button class="filter-pill" data-category="conference" onclick="filterByCategory('conference', this)">🌐 Conference</button>
+                <button class="filter-pill" data-category="meetup" onclick="filterByCategory('meetup', this)">🤝 Meetup</button>
+                <button class="filter-pill" data-category="competition" onclick="filterByCategory('competition', this)">⚡ Competition</button>
+            </div>
+
+            <div class="events-grid" id="allEventsGrid">
+                <div class="loading-spinner"><div class="spinner"></div></div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============================================================
+         REGISTRATIONS PAGE
+         ============================================================ -->
+    <div class="page" id="page-registrations">
+        <section class="section" style="padding-top: 6rem;">
+            <div class="section-header">
+                <h2 class="section-title"><span>📋</span> Event Registrations</h2>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="form-input" id="regEventSearch" placeholder="Filter registration event..." onfocus="showEventDropdown()">
+                </div>
+            </div>
+
+            <div id="eventSelectorCards" class="event-selector-grid"></div>
+
+            <div id="registrationsContent">
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h3>Select an Event Above</h3>
+                    <p>Click on any event card above to view registered participants and full database breakdown.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============================================================
+         PARTICIPANTS PAGE
+         ============================================================ -->
+    <div class="page" id="page-participants">
+        <section class="section" style="padding-top: 6rem;">
+            <div class="section-header">
+                <h2 class="section-title"><span>👥</span> Registered Participants</h2>
+                <span class="db-status connected">
+                    <span class="dot"></span>
+                    SELECT * FROM participants ORDER BY name
+                </span>
+            </div>
+            <div id="participantsContent">
+                <div class="loading-spinner"><div class="spinner"></div></div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============================================================
+         ADMIN PAGE
+         ============================================================ -->
+    <div class="page" id="page-admin">
+        <section class="section" style="padding-top: 6rem;">
+            <div class="admin-header">
+                <h2 class="section-title"><span>⚙️</span> Event Management Console</h2>
+                <button class="btn btn-primary" onclick="openCreateEventModal()">
+                    <span>➕</span> Create New Event
+                </button>
+            </div>
+            <div id="adminEventsContent">
+                <div class="loading-spinner"><div class="spinner"></div></div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============================================================
+         REGISTRATION MODAL
+         ============================================================ -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📝 Register for Event</h3>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: var(--space-md); background: var(--bg-hover); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-accent);">
+                        Event: <strong id="registerEventName" style="color: var(--text-accent);"></strong>
+                    </p>
+                </div>
+                <form id="registerForm" onsubmit="handleRegistration(event)">
+                    <input type="hidden" id="registerEventId">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="regName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email Address <span class="required">*</span></label>
+                            <input type="email" class="form-input" id="regEmail" placeholder="name@domain.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" id="regPhone" placeholder="9876543210">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">College / University</label>
+                        <input type="text" class="form-input" id="regCollege" placeholder="e.g. IIT Madras / Anna University">
+                    </div>
+                    <div class="modal-footer" style="padding: 0;">
+                        <button type="button" class="btn btn-outline" onclick="closeModal('registerModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="registerSubmitBtn">
+                            ✅ Confirm Registration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         CREATE / EDIT EVENT MODAL
+         ============================================================ -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal" style="max-width: 620px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="eventModalTitle">➕ Create New Event</h3>
+                <button class="modal-close" onclick="closeModal('eventModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm" onsubmit="handleEventSubmit(event)">
+                    <input type="hidden" id="eventFormId">
+                    <div class="form-group">
+                        <label class="form-label">Event Title <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="eventName" placeholder="e.g., HackFusion 2024" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Event Description <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="eventDesc" placeholder="Provide detailed information about the event..." required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Date & Time <span class="required">*</span></label>
+                            <input type="datetime-local" class="form-input" id="eventDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category <span class="required">*</span></label>
+                            <select class="form-select" id="eventCategory" required>
+                                <option value="hackathon">🏆 Hackathon</option>
+                                <option value="workshop">🔧 Workshop</option>
+                                <option value="seminar">🎤 Seminar</option>
+                                <option value="webinar">💻 Webinar</option>
+                                <option value="conference">🌐 Conference</option>
+                                <option value="meetup">🤝 Meetup</option>
+                                <option value="competition">⚡ Competition</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Venue / Location <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="eventVenue" placeholder="e.g., Main Auditorium" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Max Seat Capacity <span class="required">*</span></label>
+                            <input type="number" class="form-input" id="eventMaxSeats" placeholder="100" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Banner Image URL</label>
+                        <input type="url" class="form-input" id="eventImageUrl" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div class="modal-footer" style="padding: 0;">
+                        <button type="button" class="btn btn-outline" onclick="closeModal('eventModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="eventSubmitBtn">
+                            ✅ Save Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="footer">
+        <p>
+            🎯 <strong>Eventify</strong> — Full-Stack DBMS Architecture<br>
+            Powered by Django REST API & Database Engine<br>
+            <span style="color: var(--text-tertiary); font-size: 0.8rem;">Clean REST API Architecture • Real-Time SQL Sync • Glassmorphic UI</span>
+        </p>
+    </footer>
+
+    <!-- Application Script -->
+    <script src="js/app.js?v=3"></script>
+</body>
+</html>
