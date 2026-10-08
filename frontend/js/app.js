@@ -24,7 +24,7 @@
 const API_BASE_URL = window.API_BASE_URL || (
     window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:8000/api'
-        : 'https://ddm-eventify-backend.onrender.com/api'
+        : 'https://ddm-0nf5.onrender.com/api'
 );
 
 // Category emoji mapping
