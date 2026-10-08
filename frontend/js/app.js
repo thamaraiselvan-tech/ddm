@@ -20,7 +20,12 @@
 // ============================================================
 // CONFIGURATION
 // ============================================================
-const API_BASE_URL = 'http://localhost:8000/api';
+// Automatically detects whether running locally or live on GitHub Pages
+const API_BASE_URL = window.API_BASE_URL || (
+    window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:8000/api'
+        : 'https://ddm-eventify-backend.onrender.com/api'
+);
 
 // Category emoji mapping
 const CATEGORY_ICONS = {
